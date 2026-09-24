@@ -1,0 +1,2484 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+/* Brand Style Overrides */
+:root {
+  --_font-default: 'Poppins', sans-serif !important;
+  --_font-accent: 'Poppins', sans-serif !important;
+
+  /* Brand Blue Accent Override */
+  --accent--light: #004990 !important;
+  --accent-rgb--light: 0, 73, 144 !important;
+  --accent--dark: #004990 !important;
+  --accent-rgb--dark: 0, 73, 144 !important;
+}
+
+/* Light / dark scheme specific variables */
+[color-scheme=light] {
+  --accent: #004990 !important;
+  --accent-rgb: 0, 73, 144 !important;
+}
+
+[color-scheme=dark] {
+  --accent: #004990 !important;
+  --accent-rgb: 0, 73, 144 !important;
+}
+
+/* Apply Poppins Globally */
+body,
+html,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+a,
+button,
+input,
+textarea,
+select,
+.btn-caption {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Adjustments for custom logo text & style */
+.mxd-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+}
+
+.mxd-logo__image {
+  height: clamp(2rem, calc(3vw + 1.5rem), 6rem) !important;
+  width: auto !important;
+  display: block !important;
+}
+
+.mxd-logo__text {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.6rem !important;
+  letter-spacing: 0.05rem !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  color: var(--t-bright) !important;
+  white-space: nowrap !important;
+}
+
+/* Solutions page stats block list style */
+.stats-number-block {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.stats-text-block {
+  font-size: 1.5rem;
+  color: var(--t-medium);
+  line-height: 1.4;
+}
+
+/* Capabilities list styling */
+.capability-row {
+  border-bottom: 1px solid var(--st-muted);
+  padding: 3rem 0;
+  transition: background-color 0.3s ease;
+}
+
+.capability-row:hover {
+  background-color: var(--neutral-transparent);
+}
+
+.capability-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--t-bright);
+}
+
+.capability-desc {
+  margin-top: 1rem;
+  font-size: 1.6rem;
+  color: var(--t-medium);
+}
+
+.capability-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* Goosebump Test Grid styling */
+.goosebump-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.4rem;
+  margin-top: 4rem;
+}
+
+@media (max-width: 991px) {
+  .goosebump-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.goosebump-box {
+  position: relative;
+  background-color: var(--base-tint);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-m);
+  padding: 4rem;
+  height: 260px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.goosebump-box:hover {
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px rgba(0, 73, 144, 0.08);
+}
+
+.goosebump-default {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: var(--t-medium);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  width: 100%;
+}
+
+.goosebump-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background-color: var(--accent);
+  color: #ffffff;
+  font-size: 2.6rem;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  border-radius: calc(var(--_radius-m) - 1px);
+}
+
+.goosebump-box:hover .goosebump-default {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.goosebump-box:hover .goosebump-hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Interactive Growth Check Page Styles */
+.growth-checker-section {
+  padding: 6rem 0;
+}
+
+.checker-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.checker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-top: 3rem;
+}
+
+.checker-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--base-tint);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-s);
+  padding: 2.4rem 3rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.checker-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.checker-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checker-custom-box {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--st-medium);
+  border-radius: 6px;
+  margin-right: 2rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: transparent;
+}
+
+.checker-item:hover .checker-custom-box {
+  border-color: var(--accent);
+}
+
+.checker-checkbox:checked~.checker-custom-box {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.checker-custom-box i {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.checker-label-text {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--t-bright);
+}
+
+/* Live Counter */
+.checker-counter-banner {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 3rem 0;
+  color: var(--accent);
+}
+
+/* Dynamic Reveal Card */
+.reveal-card {
+  background-color: var(--base-opp);
+  color: var(--t-opp-bright);
+  border-radius: var(--_radius-m);
+  padding: 5rem;
+  margin-top: 4rem;
+  border: 1px solid var(--st-muted);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s ease;
+}
+
+.reveal-message-heading {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
+}
+
+.reveal-message-text {
+  font-size: 1.8rem;
+  line-height: 1.6;
+  margin-bottom: 3.5rem;
+  color: var(--t-opp-medium);
+}
+
+.reveal-form {
+  border-top: 1px solid var(--st-muted);
+  padding-top: 3.5rem;
+}
+
+.reveal-form-heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--t-opp-bright);
+}
+
+.reveal-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .reveal-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reveal-form-input {
+  background-color: var(--neutral-transparent);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-s);
+  padding: 1.6rem 2.4rem;
+  color: var(--t-opp-bright);
+  font-size: 1.6rem;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+.reveal-form-input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.reveal-form-btn-container {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+/* Under audit uncovers styling */
+.audit-uncovers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin: 3rem 0;
+}
+
+.audit-uncovers-item {
+  display: flex;
+  align-items: flex-start;
+  font-size: 1.6rem;
+  color: var(--t-medium);
+}
+
+.audit-uncovers-item i {
+  color: var(--accent);
+  font-size: 2rem;
+  margin-right: 1.5rem;
+  margin-top: 0.2rem;
+}
+
+/* Tooltips & Modals */
+.insight-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.insight-modal.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.insight-modal-card {
+  background: var(--base);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-l);
+  max-width: 700px;
+  width: 90%;
+  padding: 5rem;
+  position: relative;
+  transform: translateY(30px);
+  transition: transform 0.3s ease;
+}
+
+.insight-modal.is-active .insight-modal-card {
+  transform: translateY(0);
+}
+
+.insight-modal-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: none;
+  border: none;
+  font-size: 2.4rem;
+  cursor: pointer;
+  color: var(--t-bright);
+}
+
+/* Header style for stripped landing headers */
+.stripped-header {
+  background-color: #FAF7F6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.4rem 5%;
+  border-bottom: 1px solid #E0DDDB;
+}
+
+[color-scheme=dark] .stripped-header {
+  background-color: var(--bg-base);
+  border-bottom-color: var(--st-muted);
+}
+
+.stripped-header .mxd-logo__text {
+  color: #161616;
+}
+
+[color-scheme=dark] .stripped-header .mxd-logo__text {
+  color: var(--t-bright);
+}
+
+/* Color switcher alignment inside stripped header */
+.stripped-header .mxd-color-switcher {
+  margin-right: 1.5rem;
+}
+
+/* Minimal footer for landing pages — dark mode aware */
+.landing-minimal-footer {
+  background-color: #FAF7F6;
+  border-top: 1px solid #E0DDDB;
+  padding: 4rem 5%;
+  color: #161616;
+}
+
+[color-scheme=dark] .landing-minimal-footer {
+  background-color: var(--bg-base);
+  border-top-color: var(--st-muted);
+  color: var(--t-bright);
+}
+
+.landing-stats-row {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 3rem;
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--st-muted);
+  border-top: 1px solid var(--st-muted);
+}
+
+/* Hero Title Scaling Override to prevent overflow/overlap */
+.hero-08-headline__title h1 {
+  font-size: 4rem !important;
+  line-height: 1.15 !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .hero-08-headline__title h1 {
+    font-size: 5.5rem !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .hero-08-headline__title h1 {
+    font-size: 7rem !important;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .hero-08-headline__title h1 {
+    font-size: 8.5rem !important;
+  }
+}
+
+/* About-Link logo block containing style to prevent image cover cropping */
+.mxd-block__image.logo-contain {
+  background-color: var(--base-tint) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+.mxd-block__image.logo-contain img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-position: center !important;
+}
+
+
+/* Pillars section styling to match template */
+.pillar-card {
+  background-color: var(--base-tint);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-l);
+  padding: 5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--_animspeed-medium) var(--_animbezier),
+    border-color var(--_animspeed-medium) var(--_animbezier),
+    box-shadow var(--_animspeed-medium) var(--_animbezier);
+}
+
+.pillar-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 15px 40px rgba(var(--accent-rgb), 0.08);
+  transform: translateY(-6px);
+}
+
+.pillar-title {
+  font-family: var(--_font-accent);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  letter-spacing: -0.04rem;
+}
+
+.pillar-desc {
+  font-size: 1.6rem;
+  line-height: 1.6;
+  color: var(--t-medium);
+  margin-bottom: 3.5rem;
+  flex-grow: 1;
+}
+
+.pillar-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* Footer Typography Override to revert to original template fonts */
+.mxd-footer,
+.mxd-footer * {
+  font-family: "Funnel Sans", sans-serif !important;
+}
+
+.mxd-footer h1,
+.mxd-footer h2,
+.mxd-footer h3,
+.mxd-footer h4,
+.mxd-footer h5,
+.mxd-footer h6,
+.mxd-footer .footer-blocks__title,
+.mxd-footer .footer-blocks__title-m,
+.mxd-footer .footer-blocks__title-l,
+.mxd-footer .footer-nav__link,
+.mxd-footer .footer-nav__link .btn-caption,
+.mxd-footer .mxd-footer__fullwidth-text,
+.mxd-footer .mxd-footer__svg-v2 text {
+  font-family: "Funnel Display", sans-serif !important;
+}
+
+/* Fix Phosphor Icons inside footer being overridden by generic typography rules */
+.mxd-footer .ph {
+  font-family: "Phosphor" !important;
+}
+
+.mxd-footer .ph-bold {
+  font-family: "Phosphor-Bold" !important;
+}
+
+.mxd-footer .ph-fill {
+  font-family: "Phosphor-Fill" !important;
+}
+
+.mxd-footer .ph-light {
+  font-family: "Phosphor-Light" !important;
+}
+
+.mxd-footer .ph-thin {
+  font-family: "Phosphor-Thin" !important;
+}
+
+.mxd-footer .ph-duotone {
+  font-family: "Phosphor-Duotone" !important;
+}
+
+/* Horizontal Blueprint Step Cards Layout */
+.blueprint-steps-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2.4rem;
+  margin-top: 5rem;
+}
+
+@media (max-width: 1399px) {
+  .blueprint-steps-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .blueprint-steps-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .blueprint-steps-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.blueprint-step-card {
+  background-color: var(--base-tint);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-m);
+  padding: 3.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
+  transition: transform var(--_animspeed-medium) var(--_animbezier),
+    border-color var(--_animspeed-medium) var(--_animbezier),
+    box-shadow var(--_animspeed-medium) var(--_animbezier);
+}
+
+.blueprint-step-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 15px 40px rgba(var(--accent-rgb), 0.08);
+  transform: translateY(-6px);
+}
+
+.blueprint-step-num {
+  font-family: monospace;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.blueprint-step-title {
+  font-family: var(--_font-accent);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--t-bright);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.blueprint-step-desc {
+  font-size: 1.4rem;
+  color: var(--t-medium);
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.blueprint-step-badge {
+  font-family: var(--_font-accent);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent);
+  border-top: 1px solid var(--st-muted);
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+/* Mobile Responsive Improvements */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.btn {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-caption {
+  white-space: nowrap !important;
+}
+
+@media (max-width: 575px) {
+
+  /* Stack buttons vertically on mobile to prevent squeezing/truncation */
+  .mxd-hero-08__data-wrap .loading__item[style*="display: flex"],
+  .mxd-block__inner-headline .loading__item[style*="display: flex"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1.2rem !important;
+  }
+
+  .mxd-hero-08__data-wrap .loading__item[style*="display: flex"] .btn,
+  .mxd-block__inner-headline .loading__item[style*="display: flex"] .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Prevent overlapping of hero mark with fixed header / hamburger button */
+  .mxd-hero-08__wrap {
+    padding-top: 12rem !important;
+  }
+
+  /* Prevent overlapping of inner headlines with fixed header / hamburger button */
+  .mxd-section-inner-headline {
+    padding-top: 12rem !important;
+  }
+}
+
+/* Override hero indicator dot color to match official brand accent color */
+.mxd-hero__mark .mark-icon {
+  background-color: var(--accent) !important;
+}
+
+/* Hide all decorative sparkle/star icons next to subtitles globally */
+.mxd-point-subtitle svg {
+  display: none !important;
+}
+
+/* FAQ Page Mobile Responsiveness & Alignment */
+@media (max-width: 1199px) {
+  .mxd-section-inner-headline .mxd-grid-item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mxd-point-subtitle {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .inner-headline__title {
+    font-size: 3.6rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .t-large.t-bright {
+    font-size: 1.6rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .mxd-accordion {
+    padding: 0 1.5rem !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .inner-headline__title {
+    font-size: 3rem !important;
+  }
+
+  .mxd-accordion__title h6 {
+    font-size: 1.6rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .mxd-accordion__content p {
+    font-size: 1.4rem !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* Fix marquee text wrapping, overflow, and clipping during horizontal animation */
+.marquee__item.one-line {
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+  height: auto !important;
+}
+
+.marquee__text {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  display: inline-block !important;
+  padding-right: 4rem !important;
+  /* Ensure spacing before SVG dot */
+  line-height: 1.45 !important;
+  /* Increase line-height to prevent vertical clipping */
+  padding-top: 0.1em !important;
+  /* Extra headroom for ascenders */
+  padding-bottom: 0.1em !important;
+  /* Extra room for descenders like g, y */
+}
+
+.marquee {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Stretched Link for clickable stacked cards */
+.stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  content: "";
+}
+
+/* Background image for services stack cards */
+.mxd-services-stack__card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.mxd-services-stack__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Dark Gradient Overlay to ensure text readability on top of images */
+.mxd-services-stack__card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.65) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* CTA button container (absolute top-right) */
+.mxd-services-stack__card-cta {
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
+  z-index: 3;
+}
+
+@media only screen and (min-width: 768px) {
+  .mxd-services-stack__card-cta {
+    top: 5rem;
+    right: 5rem;
+  }
+}
+
+/* Header alignment and centering across all screen sizes */
+.mxd-header {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.mxd-header__logo {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.mxd-header__controls {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.mxd-nav__wrap {
+  top: 0 !important;
+  bottom: auto !important;
+}
+
+.mxd-nav__contain {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Mobile specific header overrides */
+@media only screen and (max-width: 767px) {
+  .mxd-header {
+    left: 0 !important;
+    width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 8rem !important;
+    /* leaves 80px space for hamburger */
+    padding-top: 2.4rem !important;
+  }
+
+  .mxd-nav__contain {
+    margin-top: 2.4rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .mxd-logo {
+    gap: 8px !important;
+  }
+
+  .mxd-logo__text {
+    font-size: 1.4rem !important;
+    letter-spacing: 0.03rem !important;
+  }
+
+  /* Prevent color switcher and button overlap */
+  .mxd-header__controls {
+    gap: 1.2rem !important;
+  }
+}
+
+/* Sidebar / Attributes List Design System */
+.sidebar-list-container {
+  padding: 4rem 2rem 4rem 0 !important;
+}
+
+.sidebar-list-title {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1rem !important;
+  margin-bottom: 2rem !important;
+  color: var(--t-muted) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.sidebar-list-container ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.sidebar-list-container ul li {
+  margin-bottom: 1.5rem !important;
+  padding: 0 !important;
+}
+
+.sidebar-list-container ul li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.sidebar-list-item {
+  font-size: 1.8rem !important;
+  /* matches standard body font size / t-medium */
+  font-weight: 500 !important;
+  color: var(--t-bright) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* Align sidebar lists in standard blog pages to match the ATTRIBUTES section style */
+.widget__categories {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.widget__categories .categories__item {
+  margin-bottom: 1.5rem !important;
+  display: flex !important;
+}
+
+.widget__categories .categories__item:last-child {
+  margin-bottom: 0 !important;
+}
+
+.widget__categories .categories__link {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.8rem !important;
+  font-weight: 500 !important;
+  color: var(--t-bright) !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
+}
+
+.widget__categories .categories__link:hover {
+  color: var(--accent) !important;
+}
+
+.widget__title p {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1rem !important;
+  margin-bottom: 2rem !important;
+  color: var(--t-muted) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* CTA Promo Section global background override and redesign */
+.mxd-promo__inner {
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: #161616 !important;
+  /* Always dark for premium look and text contrast */
+  border-radius: 24px !important;
+  padding-left: 3rem !important;
+  padding-right: 3rem !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .mxd-promo__inner {
+    padding-left: 5rem !important;
+    padding-right: 5rem !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-promo__inner {
+    padding-left: 6rem !important;
+    padding-right: 6rem !important;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .mxd-promo__inner {
+    padding-left: 9rem !important;
+    padding-right: 9rem !important;
+  }
+}
+
+.mxd-promo__content {
+  width: 100% !important;
+  max-width: 800px !important;
+  padding: 0 !important;
+  margin: 6rem 0 6rem 0 !important;
+  /* Slightly increased vertical margin */
+  gap: 4.5rem !important;
+  /* Slightly increased gap to match template spacing */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  z-index: 3 !important;
+  position: relative !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .mxd-promo__content {
+    margin: 7rem 0 7rem 0 !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-promo__content {
+    margin: 9rem 0 9rem 0 !important;
+    max-width: 50% !important;
+    /* Content takes up left half */
+  }
+
+  .mxd-promo__caption {
+    font-size: 6.5rem !important;
+    /* Balanced font size for 1200px viewport */
+    line-height: 1.15 !important;
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .mxd-promo__content {
+    margin: 10rem 0 10rem 0 !important;
+  }
+
+  .mxd-promo__caption {
+    font-size: 7.5rem !important;
+    /* Matches template size on standard 1440px desktop */
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .mxd-promo__content {
+    margin: 11rem 0 11rem 0 !important;
+    max-width: 50% !important;
+  }
+
+  .mxd-promo__caption {
+    font-size: 8.5rem !important;
+    /* Perfectly scaled for wide displays */
+    line-height: 1.15 !important;
+  }
+}
+
+/* Ensure CTA text is always light for readability on dark background/image */
+.mxd-promo__caption,
+.mxd-promo__title,
+.mxd-promo__title span {
+  color: #FAF7F6 !important;
+}
+
+.mxd-promo__bg {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+}
+
+.mxd-promo__bg::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-image: url('../img/images/Logos/StellAcu Media_Contact Us.webp?v=5') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  z-index: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+/* Strict 50/50 Desktop Split Layout */
+@media only screen and (min-width: 992px) {
+  .mxd-promo__bg::after {
+    display: none !important;
+  }
+
+  .mxd-promo__content {
+    width: 50% !important;
+    max-width: 50% !important;
+  }
+
+  .mxd-promo__bg {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    right: 0 !important;
+    width: 50% !important;
+    height: 100% !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+  }
+
+  .mxd-promo__bg::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-image: url('../img/images/Logos/StellAcu Media_Contact Us.webp?v=5') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    z-index: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 12%) !important;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 12%) !important;
+  }
+}
+
+/* Mobile responsive requirements for Let's Talk CTA */
+@media (max-width: 991.98px) {
+  .mxd-promo__content {
+    position: relative !important;
+    z-index: 3 !important;
+    margin: 4rem 0 !important;
+    padding: 2rem 1.5rem !important;
+  }
+
+  .mxd-promo__caption {
+    font-size: 3.6rem !important;
+    line-height: 1.25 !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* Full dark overlay on mobile to guarantee text readability when text spans full width */
+  .mxd-promo__bg::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(180deg, rgba(22, 22, 22, 0.78) 0%, rgba(22, 22, 22, 0.88) 100%) !important;
+    z-index: 2 !important;
+  }
+}
+
+
+/* Services Pages Custom Styles */
+
+/* Custom border/solid styling for hero Get in Touch button */
+.btn-contact-border {
+  background-color: var(--accent) !important;
+  color: #fff !important;
+  border: 1px solid var(--accent) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-contact-border i {
+  color: #fff !important;
+}
+
+.btn-contact-border:hover {
+  background-color: #00366b !important;
+  /* Slightly darker shade of #004990 for hover */
+  border-color: #00366b !important;
+  color: #fff !important;
+}
+
+.btn-contact-border:hover i {
+  color: #fff !important;
+}
+
+/* Metrics cards customization (Standardized Reference Layout with Blur & Scale) */
+.stats-card {
+  display: flex !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-direction: row !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.stats-card-content {
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  /* Prevents shaking/layout shifts during counter animations */
+  padding: 3rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+}
+
+/* Handle right-aligned content for about pages */
+.stats-card-content.align-end {
+  align-items: flex-end !important;
+  text-align: right !important;
+}
+
+.stats-card-content .mxd-counter {
+  margin-bottom: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.stats-card-content .mxd-counter.align-end {
+  text-align: right !important;
+}
+
+.stats-card-content .mxd-stats-cards__btngroup {
+  margin-top: 2rem !important;
+  display: flex !important;
+  gap: 1rem !important;
+}
+
+/* Image wrapper styling with blurred background panel */
+.stats-card-image,
+.stats-card-image.mxd-stats-cards-image-1,
+.stats-card-image.mxd-stats-cards-image-2,
+.stats-card-image.mxd-stats-cards-image-3,
+.stats-card-image.mxd-stats-cards-image-4 {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  display: block !important;
+  background-image: none !important;
+  /* clear inline background images */
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Blurred background panel */
+.stats-card-image::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-image: inherit !important;
+  background-size: cover !important;
+  background-position: center !important;
+  filter: blur(15px) brightness(0.9) !important;
+  transform: scale(1.1) !important;
+  /* hides blurred edges */
+  z-index: 0 !important;
+  pointer-events: none !important;
+  display: none !important;
+  /* Disable the blurred background panel entirely */
+}
+
+/* Foreground image (cover aspect ratio, no blur panel) */
+.stats-card-image img {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  /* shows the full original image without cropping */
+  display: block !important;
+}
+
+/* Description text formatting inside metrics cards */
+.mxd-counter__descr {
+  max-width: none !important;
+  font-size: 1.6rem !important;
+  line-height: 1.5 !important;
+  margin-top: 1.5rem !important;
+  color: var(--t-bright) !important;
+}
+
+/* Mobile responsive requirements */
+@media (max-width: 768px) {
+  .stats-card {
+    flex-direction: column !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .stats-card-content {
+    width: 100% !important;
+    padding: 3rem !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .stats-card-content.align-end {
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  .stats-card-content .mxd-counter.align-end {
+    text-align: left !important;
+  }
+
+  .stats-card-image,
+  .stats-card-image.mxd-stats-cards-image-1,
+  .stats-card-image.mxd-stats-cards-image-2,
+  .stats-card-image.mxd-stats-cards-image-3,
+  .stats-card-image.mxd-stats-cards-image-4 {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    border-radius: 24px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .stats-card-image img {
+    object-fit: cover !important;
+  }
+}
+
+
+/* Service Pages - Services List Section Improvements */
+
+/* Disable hover image reveal effect */
+.hover-reveal__content {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Title typography and scale reduction */
+.mxd-services-list__title p {
+  font-family: var(--_font-accent), sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 4.4rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.06rem !important;
+  color: var(--t-bright) !important;
+  margin: 0 !important;
+}
+
+.mxd-services-list__title p a {
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: color 0.3s ease !important;
+}
+
+.mxd-services-list__title p a:hover {
+  color: var(--accent) !important;
+}
+
+/* Description text spacing and line height */
+.mxd-services-list__descr p {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.6rem !important;
+  line-height: 1.6 !important;
+  color: var(--t-medium) !important;
+  margin: 0 !important;
+}
+
+/* Service features list typography and layout */
+.mxd-services-list__tagslist ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.8rem !important;
+}
+
+.mxd-services-list__tagslist ul li p {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  color: var(--t-bright) !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+}
+
+/* Spacing and layout for the items on desktop */
+@media only screen and (min-width: 1200px) {
+  .mxd-services-list__inner {
+    padding: 5rem 0 !important;
+    /* increases spacing so content can breathe */
+  }
+
+  .mxd-services-list__inner .row {
+    align-items: flex-start !important;
+    /* align at the top */
+    gap: 3rem !important;
+    /* adds visual gap between the columns */
+    display: flex !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Adjust column widths when using gap */
+  .mxd-services-list__inner .row>[class*="col-xl-"] {
+    flex-shrink: 0 !important;
+  }
+
+  .mxd-services-list__inner .row>.col-xl-4 {
+    width: calc(33.333% - 2rem) !important;
+  }
+
+  .mxd-services-list__inner .row>.col-xl-5 {
+    width: calc(41.666% - 2rem) !important;
+  }
+
+  .mxd-services-list__inner .row>.col-xl-3 {
+    width: calc(25% - 2rem) !important;
+  }
+}
+
+/* Responsive QA & Mobile fixes */
+@media only screen and (max-width: 1199px) {
+  .mxd-services-list__inner {
+    padding: 4rem 1.5rem !important;
+    /* ensures proper padding on both sides and spacing */
+  }
+
+  /* Force stack content vertically on mobile & tablet */
+  .mxd-services-list__inner .row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+    /* vertical spacing between elements */
+  }
+
+  .mxd-services-list__inner .row>[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .mxd-services-list__title p {
+    font-size: 3.2rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+  }
+
+  .mxd-services-list__descr p {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Insights / Notes Section Improvements */
+
+.architecture-notes-section {
+  background: transparent !important;
+  padding-top: 90px !important;
+  padding-bottom: 90px !important;
+}
+
+.architecture-notes-section h2 {
+  font-size: 5rem !important;
+  line-height: 1.1 !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .architecture-notes-section h2 {
+    font-size: 3.6rem !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .architecture-notes-section .mxd-section-title__hrcontrols {
+    padding-top: 0 !important;
+    /* Reset vertical offset for exact centering */
+  }
+}
+
+/* Fix main menu link font clipping for descenders (g, y, p, q, j) */
+.main-menu__link,
+.main-menu__link .btn-caption {
+  height: 5.2rem !important;
+  line-height: 5.2rem !important;
+}
+
+@media only screen and (min-width: 1200px) {
+
+  .main-menu__link,
+  .main-menu__link .btn-caption {
+    height: 7.8rem !important;
+    line-height: 7.8rem !important;
+  }
+}
+
+/* About pill button style to match user's custom design */
+.about-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem 3rem;
+  border: 1px solid var(--t-bright);
+  border-radius: 50px;
+  color: var(--t-bright);
+  font-family: var(--_font-accent);
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.about-pill-btn:hover {
+  background-color: var(--t-bright);
+  color: var(--base);
+}
+
+.about-pill-btn i {
+  font-size: 1.6rem;
+}
+
+/* Bard Sparkles style */
+.bard-sparkles {
+  position: relative;
+  width: 80px;
+  height: 60px;
+  margin-top: 1.5rem;
+  margin-left: 0.5rem;
+}
+
+.bard-sparkles .sparkle {
+  position: absolute;
+  /* Bard Color: Gemini brand violet/purple */
+  color: #9D7BFF;
+  fill: #9D7BFF;
+  filter: drop-shadow(0 0 6px rgba(157, 123, 255, 0.4));
+}
+
+.bard-sparkles .sparkle-main {
+  width: 32px;
+  height: 32px;
+  left: 0px;
+  bottom: 0px;
+}
+
+.bard-sparkles .sparkle-sub-1 {
+  width: 16px;
+  height: 16px;
+  left: 10px;
+  top: 0px;
+}
+
+.bard-sparkles .sparkle-sub-2 {
+  width: 14px;
+  height: 14px;
+  left: 45px;
+  top: 20px;
+}
+
+/* Stacking Services Cards Sizing */
+.services-stack {
+  width: 100% !important;
+  max-width: 350px !important;
+  /* Mobile view width by default */
+  height: 570px !important;
+  min-height: 570px !important;
+  margin: 0 auto !important;
+}
+
+.services-stack .stack-item {
+  width: 100% !important;
+  max-width: 350px !important;
+  height: 570px !important;
+  padding-bottom: 0 !important;
+  /* Removes padding-bottom which interferes with the 570px exact height constraint */
+}
+
+.services-stack .mxd-projects-stack__inner {
+  height: 570px !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure the card background images display with object-fit cover to fill the 1440x570 or 350x570 spaces perfectly */
+.mxd-services-stack__card-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .services-stack {
+    max-width: 720px !important;
+    /* Tablet view width */
+  }
+
+  .services-stack .stack-item {
+    max-width: 720px !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .services-stack {
+    max-width: 1440px !important;
+    /* Desktop view width */
+  }
+
+  .services-stack .stack-item {
+    max-width: 1440px !important;
+  }
+}
+
+/* Align approach list titles to the left globally and force single line on desktop */
+.mxd-approach-list__title {
+  text-align: left !important;
+  padding: 0 !important;
+  /* Reset default padding to align properly with grid columns */
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-approach-list__title {
+    white-space: nowrap !important;
+  }
+}
+
+/* Center and align Capabilities section title with stats cards, and add padding top */
+#capabilities .mxd-section-title {
+  padding-top: 6rem !important;
+}
+
+@media only screen and (min-width: 768px) {
+  #capabilities .mxd-section-title {
+    padding-top: 8rem !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  #capabilities .mxd-section-title {
+    max-width: 100% !important;
+    /* Reset width to span fully and align left */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    padding-top: 10rem !important;
+  }
+}
+
+/* Prevent cropping of blog preview card images globally, preserving their native aspect ratio and rounded corners */
+.mxd-blog-preview__media {
+  height: auto !important;
+}
+
+.mxd-blog-preview__image {
+  height: auto !important;
+  aspect-ratio: unset !important;
+  overflow: hidden !important;
+  border-radius: var(--_radius-l) !important;
+}
+
+.mxd-blog-preview__image img {
+  transform: none !important;
+  /* Disable GSAP parallax translations and zooms */
+  height: auto !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: var(--_radius-l) !important;
+}
+
+/* Prevent cropping of article thumbnail images globally in insights, preserving their native aspect ratio and rounded corners */
+.mxd-article__thumb {
+  height: auto !important;
+  max-height: 500px !important;
+  overflow: hidden !important;
+  border-radius: var(--_radius-l) !important;
+  aspect-ratio: unset !important;
+  display: flex !important;
+  justify-content: center !important;
+  background: transparent !important;
+}
+
+.mxd-article__thumb img {
+  transform: none !important;
+  /* Disable GSAP parallax translations and zooms */
+  max-width: 100% !important;
+  max-height: 500px !important;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: var(--_radius-l) !important;
+}
+
+/* Justify all article content text in both mobile and desktop view */
+.mxd-article__content p,
+.mxd-article__content li {
+  text-align: justify !important;
+}
+
+/* Make article thumbnail cover the full width to cover side corners in mobile view */
+@media only screen and (max-width: 767px) {
+  .mxd-article__thumb img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+}
+
+/* Reduce the large padding-top gap above the capabilities list */
+.mxd-services-list.grid-top {
+  padding-top: 4rem !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .mxd-services-list.grid-top {
+    padding-top: 5rem !important;
+  }
+}
+
+/* Force the grid item container to have auto height on all screen sizes to prevent empty spaces or overflows */
+.mxd-stats-cards__item {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Custom premium statistics card design (non-overlapping vertical layout with horizontal split counters) */
+.custom-premium-stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  background-color: var(--base-tint);
+  border: 1px solid var(--st-muted);
+  border-radius: var(--_radius-l);
+  height: 100% !important;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.custom-premium-stat-card__image-container {
+  width: 100%;
+  height: auto !important;
+  /* let height match the native image aspect ratio */
+  border-radius: var(--_radius-l);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.custom-premium-stat-card__image-container img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  /* shows full image, no cropping */
+  display: block !important;
+  border-radius: var(--_radius-l) !important;
+}
+
+/* Margins around image container depending on its position */
+.custom-premium-stat-card>.custom-premium-stat-card__image-container:first-child {
+  margin-bottom: 3rem;
+}
+
+.custom-premium-stat-card>.custom-premium-stat-card__image-container:last-child {
+  margin-top: 3rem;
+}
+
+.custom-premium-stat-card__content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+}
+
+.custom-premium-stat-card__counter {
+  flex: 0 0 175px !important;
+  /* Lock counter width to prevent any layout shaking */
+  width: 175px !important;
+}
+
+.custom-premium-stat-card__number {
+  font-size: 7rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  color: var(--t-bright) !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  font-variant-numeric: tabular-nums !important;
+  /* Force monospace digit widths */
+  font-feature-settings: "tnum" !important;
+}
+
+.custom-premium-stat-card__divider {
+  width: 1px;
+  height: 5.5rem;
+  background-color: var(--st-muted);
+  margin: 0 3rem;
+  flex-shrink: 0;
+}
+
+.custom-premium-stat-card__descr {
+  flex-grow: 1;
+}
+
+.custom-premium-stat-card__descr p {
+  font-size: 1.6rem !important;
+  line-height: 1.5 !important;
+  color: var(--t-medium) !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* Mobile adjustments */
+@media only screen and (max-width: 991px) {
+  .custom-premium-stat-card__image-container {
+    height: auto !important;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .custom-premium-stat-card {
+    padding: 2.5rem;
+  }
+
+  .custom-premium-stat-card__image-container {
+    height: auto !important;
+  }
+
+  .custom-premium-stat-card>.custom-premium-stat-card__image-container:first-child {
+    margin-bottom: 2rem;
+  }
+
+  .custom-premium-stat-card>.custom-premium-stat-card__image-container:last-child {
+    margin-top: 2rem;
+  }
+
+  .custom-premium-stat-card__counter {
+    flex: 0 0 125px !important;
+    /* Scale locked width down with font-size */
+    width: 125px !important;
+  }
+
+  .custom-premium-stat-card__number {
+    font-size: 5rem !important;
+  }
+
+  .custom-premium-stat-card__divider {
+    height: 4rem;
+    margin: 0 2rem;
+  }
+
+  .custom-premium-stat-card__descr p {
+    font-size: 1.4rem !important;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+
+  /* Stack counter and text vertically on very narrow screens */
+  .custom-premium-stat-card__content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .custom-premium-stat-card__counter {
+    flex: 0 0 auto !important;
+    /* Reset layout constraints for vertical stacking */
+    width: auto !important;
+  }
+
+  .custom-premium-stat-card__divider {
+    width: 4rem;
+    height: 1px;
+    margin: 1.5rem 0;
+  }
+}
+
+/* Custom Services Card 2-Column Responsive Layout */
+.services-stack .mxd-projects-stack__inner {
+  display: flex !important;
+  flex-direction: column !important;
+  /* Stacked by default (mobile & tablet) */
+  justify-content: flex-start !important;
+  padding: 4.5rem 4rem !important;
+  /* Original padding */
+  height: 570px !important;
+  /* Restore exact original card height */
+  box-sizing: border-box !important;
+  gap: 2rem !important;
+  border: 1px solid #004990 !important;
+  /* Accent border color */
+  position: relative !important;
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  /* Keep original border-radius style */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03) !important;
+  overflow: hidden !important;
+}
+
+.mxd-services-card__left {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex-grow: 1 !important;
+  gap: 1.5rem !important;
+  height: 100% !important;
+}
+
+.mxd-services-card__center-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+  width: 100% !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+}
+
+.mxd-services-card__right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 220px !important;
+  /* Mobile height */
+}
+
+.mxd-services-card__num {
+  font-size: 2.4rem !important;
+  font-weight: 700 !important;
+  color: #004990 !important;
+  /* Accent numbering */
+  line-height: 1 !important;
+  margin-bottom: 0.2rem !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mxd-services-card__content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.mxd-services-card__title {
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  color: #161616 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.mxd-services-card__desc {
+  font-size: 1.4rem !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+  color: #555555 !important;
+}
+
+/* Custom Metadata Row styling matching target card */
+.mxd-services-card__meta-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 2rem !important;
+  margin: 0.5rem 0 !important;
+  align-items: center !important;
+}
+
+.mxd-services-card__meta-row .meta-item {
+  font-size: 1.3rem !important;
+  color: #555555 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.mxd-services-card__meta-row .meta-item i {
+  color: #004990 !important;
+  /* Accent blue icons */
+  font-size: 1.5rem !important;
+}
+
+.mxd-services-card__tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  background: transparent !important;
+}
+
+/* Make tags look like clean blue pill tags */
+.mxd-services-card__tags .tag {
+  background-color: rgba(0, 73, 144, 0.05) !important;
+  border: 1px solid rgba(0, 73, 144, 0.2) !important;
+  color: #004990 !important;
+  border-radius: 50px !important;
+  padding: 0.6rem 1.4rem !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.mxd-services-card__tags .tag::before {
+  display: none !important;
+}
+
+.mxd-services-card__tags .tag:hover {
+  background-color: rgba(0, 73, 144, 0.1) !important;
+  border-color: #004990 !important;
+}
+
+.mxd-services-card__cta {
+  margin-top: 1rem !important;
+  align-self: flex-start !important;
+}
+
+/* Rounded Pill Button matching target mockup */
+.mxd-services-card__cta .btn {
+  background-color: #004990 !important;
+  border: 1px solid #004990 !important;
+  color: #ffffff !important;
+  border-radius: 50px !important;
+  /* Fully rounded pill */
+  padding: 1.2rem 3rem !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.3rem !important;
+  text-transform: none !important;
+  /* Matches 'Get in Touch' case */
+  letter-spacing: 0.02rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  height: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.mxd-services-card__cta .btn:hover {
+  background-color: #003a6d !important;
+  /* Slightly darker blue hover */
+  border-color: #003a6d !important;
+  color: #ffffff !important;
+}
+
+.mxd-services-card__cta .btn i {
+  font-size: 1.3rem !important;
+  color: #ffffff !important;
+}
+
+.mxd-services-card__img-wrap {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 20px !important;
+  /* Rounded corners as reference */
+  overflow: hidden !important;
+}
+
+.mxd-services-card__img-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 20px !important;
+}
+
+/* Force dark text and clean colors inside service cards, ignoring old background queries */
+.services-stack .bg-base-opp .mxd-services-card__title,
+.services-stack .bg-accent .mxd-services-card__title,
+.services-stack .bg-base-tint .mxd-services-card__title {
+  color: #161616 !important;
+}
+
+.services-stack .bg-base-opp .mxd-services-card__desc,
+.services-stack .bg-accent .mxd-services-card__desc,
+.services-stack .bg-base-tint .mxd-services-card__desc {
+  color: #555555 !important;
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+/* Desktop view (min-width: 992px) */
+@media only screen and (min-width: 992px) {
+  .services-stack .mxd-projects-stack__inner {
+    flex-direction: row !important;
+    padding: 3rem !important;
+    /* Same padding all around image and text */
+    height: 480px !important;
+    /* Balanced card height */
+    min-height: 480px !important;
+    gap: 4rem !important;
+    align-items: stretch !important;
+  }
+
+  .mxd-services-card__left {
+    flex: 0 0 50% !important;
+    /* Restore original 50% left column */
+    max-width: 50% !important;
+    padding: 1rem 0 1rem 1rem !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .mxd-services-card__center-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    margin: 0 !important;
+    height: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .mxd-services-card__right {
+    flex: 0 0 50% !important;
+    /* Restore original 50% right column */
+    max-width: 50% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 1rem 3rem 1rem 0 !important;
+    /* Inset with larger right gap, vertically centered */
+    display: flex !important;
+    align-items: stretch !important;
+  }
+
+  .mxd-services-card__img-wrap {
+    height: 100% !important;
+    border-radius: 20px !important;
+  }
+
+  .mxd-services-card__img-wrap img {
+    border-radius: 20px !important;
+  }
+
+  .mxd-services-card__num {
+    font-size: 2.8rem !important;
+  }
+
+  .mxd-services-card__title {
+    font-size: 3.2rem !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* Tablet adjustments (min-width: 768px and max-width: 991px) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .services-stack .mxd-projects-stack__inner {
+    padding: 3.5rem 3rem !important;
+    gap: 2.5rem !important;
+    height: 620px !important;
+    /* Adjusted for stacked content */
+  }
+
+  .mxd-services-card__right {
+    height: 240px !important;
+  }
+}
+
+/* Mobile adjustments (max-width: 575px) */
+@media only screen and (max-width: 575px) {
+  .services-stack .mxd-projects-stack__inner {
+    padding: 2.5rem !important;
+    gap: 1.5rem !important;
+    height: auto !important;
+    /* Mobile cards can scale vertically if text wraps */
+    min-height: 570px !important;
+  }
+
+  .mxd-services-card__left {
+    gap: 1.2rem !important;
+    height: auto !important;
+  }
+
+  .mxd-services-card__center-group {
+    height: auto !important;
+  }
+
+  .mxd-services-card__content {
+    gap: 0.8rem !important;
+  }
+
+  .mxd-services-card__title {
+    font-size: 2rem !important;
+  }
+
+  .mxd-services-card__desc {
+    font-size: 1.3rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .mxd-services-card__right {
+    height: 180px !important;
+  }
+
+  .mxd-services-card__cta {
+    margin-top: 1.5rem !important;
+  }
+}
+
+
+/* Balance About Us split block layout on desktop */
+@media only screen and (min-width: 1200px) {
+
+  /* Prevent image wrapper from sticking down past the bottom of the card content */
+  .mxd-about-split .mxd-block__image {
+    height: 100% !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Center the content vertically alongside the image */
+  .mxd-about-split .mxd-block__content.content-flex {
+    height: 100% !important;
+    justify-content: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .values-right-col {
+    padding-left: 5rem !important;
+  }
+}
+
+/* About Us Values Section Mobile Spacing & Justified Text Alignment */
+.mxd-values__descr,
+.mxd-values__descr p {
+  text-align: justify !important;
+}
+
+@media only screen and (max-width: 1199.98px) {
+  .values-right-col,
+  .mxd-values__item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .mxd-values__descr {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Color sparkles/decoration to brand color */
+.custom-bard-decoration svg path {
+  fill: #004990 !important;
+}
+
+/* Force visibility of animated elements inside services stack to prevent GSAP/scroll trigger opacity hiding */
+.services-stack .anim-uni-in-up {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Force legibility of titles and descriptions on white backgrounds */
+.services-stack .mxd-services-card__title,
+.services-stack .mxd-services-card__title.opposite,
+.services-stack .mxd-services-card__title * {
+  color: #161616 !important;
+}
+
+.services-stack .mxd-services-card__desc,
+.services-stack .mxd-services-card__desc.opposite {
+  color: #555555 !important;
+}
+
+/* Style pillar tags to force 2-line layout by compacting font-size and padding, preserving original colors */
+.pillar-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.6rem !important;
+  margin-top: 1.5rem !important;
+}
+
+.pillar-tags .tag {
+  padding: 0.35rem 0.8rem !important;
+  /* Compact padding to fit 2 lines */
+  font-size: 1.05rem !important;
+  /* Smaller font to force 2 lines */
+  white-space: nowrap !important;
+}
+
+/* Style the footer vision/strategy/delivered text to be larger and bold */
+.footer-blocks__socials p {
+  font-size: 2.6rem !important;
+  /* Made significantly larger */
+  font-weight: 700 !important;
+  /* Bold, matching UI headline style */
+  line-height: 1.3 !important;
+  margin: 0.8rem 0 !important;
+}
+
+/* Prevent image cropping in the about-us values/about sections */
+.mxd-values__image {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  object-fit: contain !important;
+  background-image: none !important;
+}
+
+.mxd-values__item {
+  height: auto !important;
+}
+
+.mxd-values__item .ukiyo-wrapper {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .mxd-values__image {
+    height: auto !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-values__image.image-large-desktop {
+    height: auto !important;
+  }
+}
+
+/* Ensure blog preview images are never cropped and stay attached to pills */
+.mxd-blog-preview__image {
+  height: auto !important;
+  aspect-ratio: 4 / 5 !important;
+  overflow: hidden !important;
+}
+
+.mxd-blog-preview__image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.mxd-blog-preview__tags {
+  position: absolute !important;
+  bottom: 2rem !important;
+  /* Offset slightly from bottom inside the image boundary */
+  left: 2rem !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.8rem !important;
+  z-index: 2 !important;
+  width: auto !important;
+  /* Don't stretch full width */
+}
+
+/* Ensure promo button & .btn-additional have solid white text & arrow icon */
+.mxd-promo .btn,
+.mxd-promo .btn-additional,
+.btn-additional {
+  background-color: #004990 !important;
+  border-color: #004990 !important;
+  color: #ffffff !important;
+}
+
+.mxd-promo .btn *,
+.mxd-promo .btn-additional *,
+.btn-additional * {
+  color: #ffffff !important;
+}
+
+.mxd-promo .btn:hover,
+.mxd-promo .btn-additional:hover,
+.btn-additional:hover {
+  background-color: #00366b !important;
+  border-color: #00366b !important;
+  color: #ffffff !important;
+}
+
+.mxd-promo .btn:hover *,
+.mxd-promo .btn-additional:hover *,
+.btn-additional:hover * {
+  color: #ffffff !important;
+}
+
+/* Responsive Fixes for Privacy Policy & Terms Pages on Mobile Viewports */
+@media (max-width: 575px) {
+  .policy-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center !important;
+  }
+
+  .policy-actions .btn {
+    width: 100% !important;
+    height: 4.4rem !important;
+    line-height: 4.4rem !important;
+    font-size: 1.4rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    border-radius: 50px !important;
+  }
+
+  .policy-actions .btn i {
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .padding-5x4 {
+    padding: 2.6rem 2rem !important; /* Recover layout width on narrow mobile viewports */
+  }
+}
