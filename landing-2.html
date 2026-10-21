@@ -197,7 +197,8 @@
                       <span class="reply__text" style="font-size: 1.6rem; color: var(--accent); font-weight: 600;">Done! We've received your data and will schedule your call shortly.</span>
                     </div>
                     
-                    <form class="form" id="audit-form">
+                    <form class="form" id="audit-form" data-subject="New Growth Audit request: Landing page 2">
+                      <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off">
                       <div style="display:flex; flex-direction:column; gap: 2rem;">
                         <div>
                           <input type="text" name="Name" placeholder="Your Name" required class="reveal-form-input">
@@ -347,13 +348,6 @@
 
     checkboxes.forEach(cb => {
       cb.addEventListener('change', updateChecker);
-    });
-
-    // Handle Form Submit
-    document.getElementById('audit-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('audit-reply').classList.add('is-active');
-      document.getElementById('audit-form').style.display = 'none';
     });
 
     // Initial run

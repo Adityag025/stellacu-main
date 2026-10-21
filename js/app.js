@@ -664,24 +664,51 @@ $(function() {
   // --------------------------------------------- //
   // Contact Form Start
   // --------------------------------------------- //
-  $("#contact-form").submit(function() { //Change
+  // Submissions go to Web3Forms (Vercel can't run mail.php). The access key
+  // is public by design; it only lets the form deliver to our inbox.
+  var WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+
+  $("#contact-form, #audit-form").on("submit", function(e) {
+    e.preventDefault();
     var th = $(this);
+    var reply = th.siblings(".form__reply");
+    var btn = th.find("[type=submit]");
+    var data = {
+      access_key: WEB3FORMS_KEY,
+      subject: th.data("subject") || "New website enquiry",
+      from_name: "StellAcu Media Website",
+      Page: window.location.pathname
+    };
+    $.each(th.serializeArray(), function(i, field) {
+      data[field.name] = field.value;
+    });
+    if (data.Email) data.replyto = data.Email;
+
+    btn.prop("disabled", true);
     $.ajax({
       type: "POST",
-      url: "mail.php", //Change
-      data: th.serialize()
-    }).done(function() {
-      $('.contact').find('.form').addClass('is-hidden');
-      $('.contact').find('.form__reply').addClass('is-visible');
+      url: "https://api.web3forms.com/submit",
+      contentType: "application/json",
+      dataType: "json",
+      data: JSON.stringify(data)
+    }).done(function(res) {
+      if (!res || !res.success) return formFailed(res);
+      th.addClass("is-hidden");
+      reply.addClass("is-visible");
       setTimeout(function() {
-        // Done Functions
-        $('.contact').find('.form__reply').removeClass('is-visible');
-        $('.contact').find('.form').delay(300).removeClass('is-hidden');
+        reply.removeClass("is-visible");
+        th.delay(300).removeClass("is-hidden");
         th.trigger("reset");
       }, 5000);
+    }).fail(formFailed).always(function() {
+      btn.prop("disabled", false);
     });
-    return false;
   });
+
+  function formFailed(res) {
+    console.error("Form submission failed", res);
+    alert("Sorry, your message couldn't be sent. Please try again in a moment.");
+  }
   // --------------------------------------------- //
   // Contact Form End
   // --------------------------------------------- //

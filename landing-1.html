@@ -124,7 +124,8 @@
                     <span class="reply__text" style="font-size: 1.8rem; font-weight:600; color:var(--accent);">Request Sent! We will coordinate with you to run your growth audit within 24 hours.</span>
                   </div>
                   
-                  <form class="form" id="audit-form">
+                  <form class="form" id="audit-form" data-subject="New Growth Audit request: Landing page 1">
+                    <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off">
                     <div class="row g-4">
                       <div class="col-12 col-sm-6">
                         <label style="font-size: 1.3rem; font-weight: 600; margin-bottom: 0.8rem; display: block; color: var(--t-bright);">Full Name</label>
@@ -399,17 +400,6 @@
   <script src="js/libs.min.js"></script>
   <script src="js/app.js"></script>
   <!-- Load Scripts End -->
-
-  <!-- Custom Lead Form Script -->
-  <script>
-    document.getElementById('audit-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Show confirmation reply block
-      document.getElementById('audit-reply').classList.add('is-active');
-      // Hide form fields
-      document.getElementById('audit-form').style.display = 'none';
-    });
-  </script>
 
 </body>
 
