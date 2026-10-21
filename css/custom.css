@@ -2638,3 +2638,11 @@ section,
   color: var(--t-bright);
   opacity: 1;
 }
+
+@media (max-width: 1199px) {
+  /* Below 1200px the hero video sits in normal flow and touched the
+     About image right under it. */
+  .mxd-hero-08__wrap {
+    padding-bottom: 6rem;
+  }
+}
