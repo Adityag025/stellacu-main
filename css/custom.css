@@ -2690,3 +2690,24 @@ section,
     font-size: 2.2rem;
   }
 }
+
+/* Insights hero: clear the fixed header and drop the oversized gap
+   above the first category row */
+.mxd-section.insights-hero {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-section.insights-hero {
+    padding-top: 6rem;
+    padding-bottom: 8rem;
+  }
+
+  /* Title, description and button share one vertical centre line */
+  .insights-hero .mxd-section-title__hrdescr,
+  .insights-hero .mxd-section-title__hrcontrols,
+  .architecture-notes-section .mxd-section-title__hrdescr {
+    padding-top: 0 !important;
+  }
+}
