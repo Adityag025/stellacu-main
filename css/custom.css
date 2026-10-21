@@ -2646,3 +2646,22 @@ section,
     padding-bottom: 6rem;
   }
 }
+
+@media only screen and (max-width: 991px) {
+  /* Service cards: space-between spread the text differently depending on
+     how many lines the title wrapped to. Stack the text from the top with
+     fixed gaps; any spare height goes above the image instead. */
+  .mxd-services-card__left,
+  .mxd-services-card__center-group {
+    justify-content: flex-start !important;
+    height: auto !important;
+  }
+
+  .mxd-services-card__left {
+    flex-grow: 0 !important;
+  }
+
+  .mxd-services-card__right {
+    margin-top: auto !important;
+  }
+}
