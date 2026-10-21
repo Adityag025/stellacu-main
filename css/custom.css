@@ -2602,3 +2602,11 @@ section,
     display: none;
   }
 }
+
+@media (max-width: 767px) {
+  /* Long typed words ("Advertising.") wrapped mid-animation and made the
+     line jump. Give the typed word its own line on mobile. */
+  .animated-type .typed-line {
+    display: block;
+  }
+}
