@@ -591,6 +591,25 @@ $(function() {
       close: function() { $('body').removeClass('overflow-hidden'); lenis.start(); }
     }
   });
+
+  // Hero #08: open the background video full size, with sound and controls
+  $('.mxd-hero-08__video-wrap').on('click', function() {
+    var src = $(this).find('source').attr('src');
+    if (!src) return;
+    $.magnificPopup.open({
+      items: {
+        src: '<div class="hero-video-popup"><video src="' + encodeURI(src) + '" controls autoplay playsinline></video></div>'
+      },
+      type: 'inline',
+      mainClass: 'mfp-fade',
+      removalDelay: 160,
+      fixedContentPos: false,
+      callbacks: {
+        beforeOpen: function() { $('body').addClass('overflow-hidden'); lenis.stop(); },
+        close: function() { $('body').removeClass('overflow-hidden'); lenis.start(); }
+      }
+    });
+  });
   // --------------------------------------------- //
   // Magnific Popup Video End
   // --------------------------------------------- //
