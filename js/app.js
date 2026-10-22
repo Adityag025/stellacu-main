@@ -592,13 +592,27 @@ $(function() {
     }
   });
 
+  // Some phones (e.g. iOS Low Power Mode) block muted autoplay; start the
+  // background videos on the first tap instead
+  $('video[autoplay]').each(function() {
+    var v = this;
+    v.muted = true;
+    var p = v.play();
+    if (p && p.catch) {
+      p.catch(function() {
+        $(document).one('touchstart click', function() { v.play().catch(function() {}); });
+      });
+    }
+  });
+
   // Hero #08: open the background video full size, with sound and controls
   $('.mxd-hero-08__video-wrap').on('click', function() {
-    var src = $(this).find('source').attr('src');
+    var video = $(this).find('video')[0];
+    var src = (video && video.currentSrc) || encodeURI($(this).find('source').last().attr('src') || '');
     if (!src) return;
     $.magnificPopup.open({
       items: {
-        src: '<div class="hero-video-popup"><video src="' + encodeURI(src) + '" controls autoplay playsinline></video></div>'
+        src: '<div class="hero-video-popup"><video src="' + src + '" controls autoplay playsinline></video></div>'
       },
       type: 'inline',
       mainClass: 'mfp-fade',
