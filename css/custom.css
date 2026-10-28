@@ -2711,3 +2711,31 @@ section,
     padding-top: 0 !important;
   }
 }
+
+/* Back-to-top: the template's difference blend + backdrop blur rendered as a
+   solid black dot with no arrow on mobile browsers. Use solid brand colours. */
+.btn-to-top {
+  mix-blend-mode: normal;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background-color: #004990;
+  border-color: #004990;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn-to-top i {
+  color: #ffffff;
+}
+
+/* Insights: headings were wider than phone screens, so "ARCHITECTURE"
+   broke mid-word. Scale them with the viewport on phones. */
+@media only screen and (max-width: 575px) {
+  .insights-hero h1 {
+    font-size: min(3.6rem, 8.5vw) !important;
+  }
+
+  .architecture-notes-section h2 {
+    font-size: min(3rem, 7.5vw) !important;
+  }
+}
