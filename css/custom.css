@@ -2739,3 +2739,15 @@ section,
     font-size: min(3rem, 7.5vw) !important;
   }
 }
+
+/* Inner-page stat cards had no space below them, so the next section's
+   heading sat right on the last card (Solutions + service pages) */
+.mxd-section.mxd-section-inner-stats {
+  padding-bottom: 8rem;
+}
+
+@media only screen and (min-width: 1200px) {
+  .mxd-section.mxd-section-inner-stats {
+    padding-bottom: 10rem;
+  }
+}
