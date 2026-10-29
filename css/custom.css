@@ -2751,3 +2751,16 @@ section,
     padding-bottom: 10rem;
   }
 }
+
+/* Architecture notes: card text starts at the image edge */
+.architecture-notes-section .mxd-blog-preview__data {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Insights: category titles sit in the first card column; scale so they stay on two lines */
+@media only screen and (min-width: 1200px) {
+  .insights-category h2 {
+    font-size: min(5rem, 2.5vw) !important;
+  }
+}
