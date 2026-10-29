@@ -2751,16 +2751,3 @@ section,
     padding-bottom: 10rem;
   }
 }
-
-/* Stat cards: keep text above image in every card */
-.custom-premium-stat-card>.custom-premium-stat-card__image-container:first-child {
-  order: 2;
-  margin-bottom: 0;
-  margin-top: 3rem;
-}
-
-@media only screen and (max-width: 767px) {
-  .custom-premium-stat-card>.custom-premium-stat-card__image-container:first-child {
-    margin-top: 2rem;
-  }
-}
