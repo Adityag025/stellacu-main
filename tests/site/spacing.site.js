@@ -181,3 +181,28 @@ test('insights: every heading row is evenly spaced', async () => {
   }
   assert.deepEqual(problems, []);
 });
+
+test('no full-width divider lines between page sections', async () => {
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const path of [...MAIN_PAGES, '/landing-1', '/landing-2']) {
+      for (const width of [DESKTOP, MOBILE]) {
+        const { page } = await openPage(browser, path, width);
+        const lines = await page.evaluate(() =>
+          [...document.querySelectorAll('main > .mxd-section')].flatMap((section) => {
+            const style = getComputedStyle(section);
+            return ['Top', 'Bottom']
+              .filter((side) => parseFloat(style[`border${side}Width`]) > 0 && style[`border${side}Style`] !== 'none')
+              .map((side) => `${side.toLowerCase()} line on .${[...section.classList].join('.')}`);
+          })
+        );
+        lines.forEach((l) => problems.push(`${path} @${width}: ${l}`));
+        await page.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});
