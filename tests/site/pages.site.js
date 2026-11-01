@@ -75,3 +75,33 @@ test('unknown addresses get the 404 page', async () => {
   assert.equal(res.status, 404);
   assert.match(await res.text(), /Page Not Found \| StellAcu Media/);
 });
+
+test('refresh starts at the top (hero), section links still jump to their section', async () => {
+  const { openPage: open, sleep } = require('./browser');
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const path of ['/', '/about-us', '/business-advisory', '/insights']) {
+      const { page } = await open(browser, path);
+      await sleep(1500);
+      await page.evaluate(() => window.scrollTo(0, 2500));
+      await sleep(800);
+      await page.reload({ waitUntil: 'networkidle2' });
+      await sleep(2500);
+      const y = await page.evaluate(() => Math.round(window.scrollY));
+      if (y > 5) problems.push(`${path}: after refresh scrollY is ${y}, want 0`);
+      await page.close();
+    }
+
+    const { page } = await open(browser, '/solutions#solution-pillars');
+    await sleep(1500);
+    await page.reload({ waitUntil: 'networkidle2' });
+    await sleep(2500);
+    const y = await page.evaluate(() => Math.round(window.scrollY));
+    if (y < 200) problems.push(`/solutions#solution-pillars: after refresh scrollY is ${y}, want the section`);
+    await page.close();
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});

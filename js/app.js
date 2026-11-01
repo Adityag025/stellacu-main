@@ -127,6 +127,29 @@ gsap.ticker.add((time) => {
   lenis.raf(time * 1000)
 });
 gsap.ticker.lagSmoothing(0);
+
+// Pages always open at the top (hero section), also on refresh, instead of
+// the browser's remembered scroll position. The setting is stored with the
+// history entry, so it must be set on every load to apply to the next
+// refresh. ScrollTrigger keeps its own copy of it and writes it back on
+// every refresh, so set it through ScrollTrigger. Links to a section (#id)
+// still jump there.
+ScrollTrigger.clearScrollMemory('manual');
+if (!location.hash) {
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+    lenis.scrollTo(0, { immediate: true });
+  };
+  scrollToTop();
+  window.addEventListener('load', scrollToTop);
+} else {
+  // With the browser's own restoring off, jump to the linked section once
+  // the page (header/footer partials, images) has finished laying out.
+  window.addEventListener('load', () => {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target) lenis.scrollTo(target, { immediate: true });
+  });
+}
 // --------------------------------------------- //
 // Lenis Scroll Plugin End
 // --------------------------------------------- //
