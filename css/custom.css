@@ -552,10 +552,10 @@ select,
   gap: 0.8rem;
 }
 
-/* Footer Typography Override to revert to original template fonts */
+/* Footer uses the site font (Poppins) like every other section */
 .mxd-footer,
 .mxd-footer * {
-  font-family: "Funnel Sans", sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 .mxd-footer h1,
@@ -571,7 +571,7 @@ select,
 .mxd-footer .footer-nav__link .btn-caption,
 .mxd-footer .mxd-footer__fullwidth-text,
 .mxd-footer .mxd-footer__svg-v2 text {
-  font-family: "Funnel Display", sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 /* Fix Phosphor Icons inside footer being overridden by generic typography rules */
@@ -647,7 +647,7 @@ select,
 }
 
 .blueprint-step-num {
-  font-family: monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: 2.4rem;
   font-weight: 700;
   color: var(--accent);
