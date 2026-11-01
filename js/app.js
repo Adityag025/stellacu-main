@@ -654,16 +654,122 @@ $(function() {
     }, 5000);
   }
 
-  function formFailed(xhr) {
+  function formFailed(form, xhr) {
+    if (showServerErrors(form, xhr)) return;
     console.error("Form submission failed", xhr && xhr.responseJSON);
     alert("Sorry, your message couldn't be sent. Please try again in a moment.");
   }
+
+  // Field validation. Same rules and messages as api/_lib/validation.js, so
+  // visitors see problems under the field before anything is sent. The
+  // server still checks everything again.
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var PHONE_RE = /^[+()\d\s.-]{6,30}$/;
+
+  function isWebsite(value) {
+    var withScheme = /^[a-z][a-z\d+.-]*:\/\//i.test(value) ? value : "https://" + value;
+    try {
+      var url = new URL(withScheme);
+      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.indexOf(".") > 0;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // Rules by input type; maxLength matches the server limits.
+  var FIELD_RULES = {
+    email: { maxLength: 254, test: function(v) { return EMAIL_RE.test(v); }, message: "Enter a valid email address." },
+    tel: { maxLength: 30, test: function(v) { return PHONE_RE.test(v); }, message: "Enter a valid phone number." },
+    url: { maxLength: 500, test: isWebsite, message: "Enter a valid website address." },
+    textarea: { maxLength: 5000 },
+    select: {},
+    text: { maxLength: 200 }
+  };
+
+  function ruleFor(input) {
+    if (input.is("textarea")) return FIELD_RULES.textarea;
+    if (input.is("select")) return FIELD_RULES.select;
+    return FIELD_RULES[input.attr("type")] || FIELD_RULES.text;
+  }
+
+  // Returns the error message for a field, or "" when it is valid.
+  function fieldError(input) {
+    var value = $.trim(input.val() || "");
+    if (!value) {
+      if (!input.prop("required")) return "";
+      return input.is("select") ? "Please choose an option." : "This field is required.";
+    }
+    var rule = ruleFor(input);
+    if (rule.maxLength && value.length > rule.maxLength) {
+      return "Please use " + rule.maxLength + " characters or fewer.";
+    }
+    if (rule.test && !rule.test(value)) return rule.message;
+    return "";
+  }
+
+  // Shows (or clears, when message is empty) the message under a field.
+  function showFieldError(input, message) {
+    var errorEl = input.siblings(".field-error");
+    if (!message) {
+      input.removeClass("is-invalid").removeAttr("aria-invalid aria-describedby");
+      errorEl.remove();
+      return;
+    }
+    if (!errorEl.length) {
+      var id = "error-" + (input.closest("form").attr("id") || "form") + "-" + input.attr("name");
+      errorEl = $('<span class="field-error" role="alert"></span>').attr("id", id).insertAfter(input);
+    }
+    errorEl.text(message);
+    input.addClass("is-invalid").attr({ "aria-invalid": "true", "aria-describedby": errorEl.attr("id") });
+  }
+
+  function formFields(form) {
+    return form.find("input, select, textarea").not("[name=botcheck], [type=hidden], [type=submit]");
+  }
+
+  // Checks every field; focuses the first problem. Returns true when valid.
+  function validateForm(form) {
+    var firstInvalid = null;
+    formFields(form).each(function() {
+      var input = $(this);
+      var message = fieldError(input);
+      showFieldError(input, message);
+      if (message && !firstInvalid) firstInvalid = input;
+    });
+    if (firstInvalid) firstInvalid.trigger("focus");
+    return !firstInvalid;
+  }
+
+  // Puts 422 "validation_failed" messages from the API under their fields.
+  function showServerErrors(form, xhr) {
+    var res = xhr && xhr.responseJSON;
+    if (!res || res.error !== "validation_failed" || !res.fields) return false;
+    $.each(res.fields, function(name, message) {
+      showFieldError(form.find("[name=" + name + "]"), message);
+    });
+    form.find(".is-invalid").first().trigger("focus");
+    return true;
+  }
+
+  // Our messages replace the browser's own pop-ups. A field is checked when
+  // the visitor leaves it, then re-checked as they type until it is fixed.
+  $("#contact-form, #audit-form, .notify-form").each(function() {
+    var form = $(this).attr("novalidate", "novalidate");
+    formFields(form).on("blur", function() {
+      var input = $(this);
+      if ($.trim(input.val() || "")) showFieldError(input, fieldError(input));
+    }).on("input change", function() {
+      var input = $(this);
+      if (input.hasClass("is-invalid")) showFieldError(input, fieldError(input));
+    });
+  });
 
   // Growth Audit + landing page forms → POST /api/contact
   // Each <form> names itself with data-form (matches api/_lib/forms.js).
   $("#contact-form, #audit-form").on("submit", function(e) {
     e.preventDefault();
     var form = $(this);
+    if (!validateForm(form)) return;
     var btn = form.find("[type=submit]");
     var fields = {};
     $.each(form.serializeArray(), function(i, field) {
@@ -680,7 +786,9 @@ $(function() {
       botcheck: botcheck
     }).done(function() {
       flashReply(form, form.siblings(".form__reply"));
-    }).fail(formFailed).always(function() {
+    }).fail(function(xhr) {
+      formFailed(form, xhr);
+    }).always(function() {
       btn.prop("disabled", false);
     });
   });
@@ -689,6 +797,7 @@ $(function() {
   $(".notify-form").on("submit", function(e) {
     e.preventDefault();
     var form = $(this);
+    if (!validateForm(form)) return;
     var box = form.closest(".notify");
 
     postJson("/api/subscribe", {
@@ -698,6 +807,7 @@ $(function() {
     }).done(function() {
       flashReply(form, box.find(".subscription-ok"));
     }).fail(function(xhr) {
+      if (showServerErrors(form, xhr)) return;
       console.error("Subscribe failed", xhr && xhr.responseJSON);
       flashReply(form, box.find(".subscription-error"));
     });

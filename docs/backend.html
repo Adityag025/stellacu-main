@@ -218,6 +218,30 @@ package.json                 npm scripts + Node version (22.x). No dependencies.
   <li>On success the form's <code>.form__reply</code> message shows for 5 seconds, then the form resets.
       On failure the contact forms show an alert and the footer shows its error message.</li>
 </ul>
+
+<h3>Field validation in the browser</h3>
+<p>Before anything is sent, every field is checked with the same rules and messages as
+<code>api/_lib/validation.js</code>. The rule comes from the input itself:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Input</th><th>Rule</th><th>Message</th></tr>
+  <tr><td>any with <code>required</code></td><td>not empty</td><td>This field is required. / Please choose an option.</td></tr>
+  <tr><td><code>type="email"</code></td><td>name@domain.tld, max 254</td><td>Enter a valid email address.</td></tr>
+  <tr><td><code>type="tel"</code></td><td>digits, spaces, + ( ) . -, 6–30 characters</td><td>Enter a valid phone number.</td></tr>
+  <tr><td><code>type="url"</code></td><td>a domain like acme.com (https:// optional), max 500</td><td>Enter a valid website address.</td></tr>
+  <tr><td>text / textarea</td><td>max 200 / 5000 characters</td><td>Please use N characters or fewer.</td></tr>
+</table>
+</div>
+<ul>
+  <li>Messages appear under the field (<code>.field-error</code>) and the field gets a red border
+      (<code>.is-invalid</code>, styles at the end of <code>css/custom.css</code>).</li>
+  <li>A field is checked when the visitor leaves it, and re-checked as they type until it is fixed.
+      On submit every field is checked and the first problem gets focus.</li>
+  <li>If the server still rejects a field (422), its message appears under that field the same way.</li>
+  <li>The browser's own pop-up messages are turned off (<code>novalidate</code>) so only these show.</li>
+</ul>
+<p>If you change a rule, change it in both <code>js/app.js</code> and <code>api/_lib/validation.js</code>;
+the server is the one that counts.</p>
 <p>In the HTML, the input <code>name</code> attributes must match the field names in
 <code>api/_lib/forms.js</code> (all lower case), and each contact form needs a <code>data-form</code> attribute.</p>
 

@@ -2764,3 +2764,24 @@ section,
     font-size: min(5rem, 2.5vw) !important;
   }
 }
+
+/* Form field validation (js/app.js "Website Forms"): red border + message under the field */
+:root {
+  --field-error: #d1242f;
+}
+
+[color-scheme=dark] {
+  --field-error: #ff6b6b;
+}
+
+.form .is-invalid {
+  border-color: var(--field-error) !important;
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--field-error);
+}
