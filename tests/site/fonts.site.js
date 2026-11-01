@@ -49,3 +49,23 @@ for (const width of [DESKTOP, MOBILE]) {
     assert.deepEqual([...new Set(problems)], []);
   });
 }
+
+test('fonts: every heading uses weight 500', async () => {
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const path of PAGES) {
+      const { page } = await openPage(browser, path);
+      const heavy = await page.evaluate(() =>
+        [...document.querySelectorAll('main :is(h1, h2, h3, h4, h5, h6)')]
+          .filter((h) => h.getClientRects().length && getComputedStyle(h).fontWeight !== '500')
+          .map((h) => `${h.tagName} ${getComputedStyle(h).fontWeight} "${h.textContent.trim().slice(0, 30)}"`)
+      );
+      heavy.forEach((h) => problems.push(`${path}: ${h}`));
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});

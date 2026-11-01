@@ -2854,3 +2854,10 @@ main.mxd-page-content > .mxd-section > .mxd-container > .mxd-block:last-child > 
     white-space: nowrap;
   }
 }
+
+/* One heading weight across the site: every heading uses Poppins 500,
+   whatever weight the template or inline styles give it. */
+main :is(h1, h2, h3, h4, h5, h6),
+main :is(h1, h2, h3, h4, h5, h6) * {
+  font-weight: 500 !important;
+}
