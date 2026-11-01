@@ -673,10 +673,17 @@ $(function() {
   // --------------------------------------------- //
   // All forms post JSON to our serverless functions in /api (see api/ and
   // docs/backend.html). The server decides where each submission goes.
+  // Where the form API runs. On Vercel and the local dev server the API is
+  // on the same site; anywhere else (e.g. shared hosting, which cannot run
+  // the Node.js functions) the forms post to the Vercel deployment, which
+  // allows the live domain via ALLOWED_ORIGINS.
+  var API_HOST = "https://stellacu-main.vercel.app";
+  var API_BASE = /(\.vercel\.app|^localhost|^127\.0\.0\.1)$/.test(location.hostname) ? "" : API_HOST;
+
   function postJson(url, payload) {
     return $.ajax({
       type: "POST",
-      url: url,
+      url: API_BASE + url,
       contentType: "application/json",
       dataType: "json",
       data: JSON.stringify(payload)

@@ -1,0 +1,54 @@
+# StellAcu Media website - settings for Apache / LiteSpeed shared hosting.
+# Does the same job as vercel.json does on Vercel. Upload it to the same
+# folder as index.html (usually public_html).
+
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+
+# "/insights" is both a page (insights.html) and a folder (insights/).
+# Without this Apache would redirect it to "/insights/".
+DirectorySlash Off
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always use HTTPS.
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Old addresses: "/index.html" -> "/", "/about-us.html" -> "/about-us".
+  RewriteCond %{THE_REQUEST} \s/+(.*?/)?index\.html[\s?] [NC]
+  RewriteRule ^ /%1 [L,R=301]
+  RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [L,R=301]
+
+  # Clean addresses: "/about-us" serves about-us.html
+  # (also "/partials/header", which every page loads).
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+# Faster loading: compress text files and let browsers cache assets.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 hour"
+  ExpiresByType application/javascript "access plus 1 hour"
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType video/mp4 "access plus 6 months"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+</IfModule>

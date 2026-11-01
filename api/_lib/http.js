@@ -10,6 +10,7 @@
  */
 
 const { HttpError } = require('./errors');
+const { readConfig } = require('./config');
 
 const MAX_BODY_BYTES = 20 * 1024;
 
@@ -50,13 +51,37 @@ async function readJsonBody(req) {
 }
 
 /**
- * Wraps a handler with method checking and error handling.
+ * Lets the listed websites call the API from the browser (CORS). Needed when
+ * the pages are hosted somewhere else (e.g. shared hosting) than the API.
+ */
+function applyCors(req, res, methods, allowedOrigins) {
+  const origin = req.headers && req.headers.origin;
+  if (!origin || !allowedOrigins.includes(origin)) return;
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', [...methods, 'OPTIONS'].join(', '));
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', '86400');
+}
+
+/**
+ * Wraps a handler with CORS, method checking and error handling.
  *
  * @param {string[]} methods Allowed HTTP methods, e.g. ['POST'].
  * @param {(req, res) => Promise<void>} handle The endpoint logic.
+ * @param {object} [options]
+ * @param {string[]} [options.allowedOrigins] Defaults to ALLOWED_ORIGINS (config.js).
  */
-function createHandler(methods, handle) {
+function createHandler(methods, handle, { allowedOrigins = readConfig().allowedOrigins } = {}) {
   return async function handler(req, res) {
+    applyCors(req, res, methods, allowedOrigins);
+
+    // Browser preflight check before a cross-site POST.
+    if (req.method === 'OPTIONS') {
+      res.statusCode = 204;
+      return res.end();
+    }
+
     if (!methods.includes(req.method)) {
       res.setHeader('Allow', methods.join(', '));
       return sendJson(res, 405, { ok: false, error: 'method_not_allowed' });

@@ -9,3 +9,6 @@ Thumbs.db
 .env.local
 .env.*.local
 .vercel/
+
+# Upload bundle (npm run build:upload)
+dist/

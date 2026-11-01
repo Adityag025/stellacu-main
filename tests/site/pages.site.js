@@ -65,7 +65,7 @@ test('old .html addresses redirect permanently to clean URLs', async () => {
     ['/insights/funnel-is-dead.html', '/insights/funnel-is-dead'],
   ]) {
     const res = await fetch(BASE_URL + from, { redirect: 'manual' });
-    assert.equal(res.status, 308, from);
+    assert.ok([301, 308].includes(res.status), `${from}: status ${res.status}`);
     assert.equal(new URL(res.headers.get('location'), BASE_URL).pathname, to, from);
   }
 });

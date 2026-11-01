@@ -13,10 +13,11 @@ const fs = require('node:fs');
 const http = require('node:http');
 const path = require('node:path');
 
-const ROOT = path.resolve(__dirname, '..');
+// SITE_ROOT=dist/upload serves the upload bundle instead, to check it is complete.
+const ROOT = path.resolve(process.env.SITE_ROOT || path.join(__dirname, '..'));
 const PORT = Number(process.env.PORT) || 3000;
 
-const envFile = path.join(ROOT, '.env.local');
+const envFile = path.join(__dirname, '..', '.env.local');
 if (fs.existsSync(envFile)) process.loadEnvFile(envFile);
 
 const CONTENT_TYPES = {
@@ -42,7 +43,7 @@ const CONTENT_TYPES = {
 function findApiHandler(pathname) {
   const match = pathname.match(/^\/api\/([a-z0-9-]+)\/?$/);
   if (!match) return null;
-  const file = path.join(ROOT, 'api', `${match[1]}.js`);
+  const file = path.join(__dirname, '..', 'api', `${match[1]}.js`);
   return fs.existsSync(file) ? require(file) : null;
 }
 

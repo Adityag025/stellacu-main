@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "node scripts/dev-server.js",
     "test": "node --test",
-    "test:site": "node --test --test-concurrency=1 \"tests/site/*.site.js\""
+    "test:site": "node --test --test-concurrency=1 \"tests/site/*.site.js\"",
+    "build:upload": "node scripts/build-upload.js"
   },
   "engines": {
     "node": "22.x"

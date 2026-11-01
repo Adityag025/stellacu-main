@@ -75,6 +75,7 @@
     <a href="#local">Local development</a>
     <a href="#tests">Tests</a>
     <a href="#changes">Common changes</a>
+    <a href="#hosting">Shared hosting</a>
     <a href="#security">Security</a>
   </nav>
 </header>
@@ -165,6 +166,8 @@ scripts/dev-server.js        Local server: static site + /api, reads .env.local
 docs/backend.html            This document
 .env.example                 Template for local settings (copy to .env.local)
 vercel.json                  Clean URLs: /about-us serves about-us.html; .html addresses 308-redirect
+.htaccess                    The same for Apache/LiteSpeed shared hosting, plus HTTPS and caching
+scripts/build-upload.js      npm run build:upload: copies the files for shared hosting to dist/upload/
 .vercelignore                Keeps tests/, scripts/, docs/ off the live site
 package.json                 npm scripts + Node version (22.x). Only dev dependency: puppeteer-core (browser tests).</code></pre>
 
@@ -333,6 +336,27 @@ and <code>api/subscribe.js</code>. Nothing else depends on Resend.</p>
 <h3>See errors in production</h3>
 <p>Vercel → the project → <strong>Logs</strong> (filter by <code>/api/</code>). Handlers log
 <code>[contact]</code> / <code>[subscribe]</code> lines with the reason for every 502 and 503.</p>
+
+<h2 id="hosting">Hosting on shared hosting (cPanel etc.)</h2>
+<p>Shared hosting serves the pages but cannot run the Node.js functions in <code>api/</code>.
+So the pages go on the hosting and the form API stays on Vercel:</p>
+<ol>
+  <li><strong>Build the upload:</strong> <code>npm run build:upload</code> copies exactly the needed files to
+      <code>dist/upload/</code> (17 pages, <code>insights/</code>, <code>partials/</code>, <code>css/</code>, <code>js/</code>,
+      <code>fonts/</code>, <code>img/</code>, <code>video/</code>, <code>.htaccess</code>). Zip that folder's contents.</li>
+  <li><strong>Upload:</strong> cPanel → File Manager → <code>public_html</code> → Upload the ZIP → Extract.
+      <code>index.html</code> and <code>.htaccess</code> must end up directly in <code>public_html</code>
+      (turn on "Show hidden files" to see <code>.htaccess</code>).</li>
+  <li><strong>HTTPS:</strong> enable the free SSL certificate (cPanel → SSL/TLS Status or "Let's Encrypt").</li>
+  <li><strong>Forms:</strong> on any domain other than <code>*.vercel.app</code>, <code>js/app.js</code> sends form data to
+      <code>API_HOST</code> (the Vercel deployment). Vercel only accepts browsers from the domains in
+      <code>ALLOWED_ORIGINS</code> (default <code>https://stellacumedia.com</code> and <code>https://www.stellacumedia.com</code>);
+      set that variable on Vercel if the domain differs. The Resend settings are still set on Vercel.</li>
+  <li><strong>Check:</strong> <code>BASE_URL=https://stellacumedia.com npm run test:site</code>.</li>
+</ol>
+<p><code>.htaccess</code> does what <code>vercel.json</code> does on Vercel: clean URLs (<code>/about-us</code> serves
+<code>about-us.html</code>, including <code>/partials/header</code>), 301 redirects from old <code>.html</code> addresses,
+HTTPS, the 404 page, compression and browser caching. Keep the Vercel project: it hosts the form API.</p>
 
 <h2 id="security">Security notes</h2>
 <ul>

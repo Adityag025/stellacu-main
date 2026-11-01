@@ -26,6 +26,9 @@ function readConfig(env = process.env) {
       // Inbox(es) that receive enquiries. Comma-separated for several.
       to: splitList(env.MAIL_TO),
     },
+    // Websites (other than this Vercel deployment) allowed to call the API
+    // from the browser, e.g. the live site on shared hosting. Comma-separated.
+    allowedOrigins: splitList(env.ALLOWED_ORIGINS || 'https://stellacumedia.com,https://www.stellacumedia.com'),
     mailchimp: {
       apiKey: env.MAILCHIMP_API_KEY || '',
       audienceId: env.MAILCHIMP_AUDIENCE_ID || '',

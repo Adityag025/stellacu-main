@@ -4,3 +4,4 @@ scripts/
 docs/
 .env.example
 *.md
+.htaccess
