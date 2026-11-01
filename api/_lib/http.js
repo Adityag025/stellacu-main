@@ -32,11 +32,22 @@ function parseJson(text) {
 
 /** Returns the request body as an object. */
 async function readJsonBody(req) {
-  // Vercel has already parsed JSON bodies into req.body.
-  if (req.body !== undefined) {
-    if (Buffer.isBuffer(req.body)) return parseJson(req.body.toString('utf8'));
-    if (typeof req.body === 'string') return parseJson(req.body);
-    return req.body || {};
+  // Vercel reads the whole body before our code runs, so check the declared
+  // size here; the stream check below covers the local dev server and tests.
+  const declaredSize = Number(req.headers && req.headers['content-length']);
+  if (declaredSize > MAX_BODY_BYTES) throw new HttpError(413, 'payload_too_large');
+
+  // Vercel parses JSON bodies into req.body; for malformed JSON the getter throws.
+  let body;
+  try {
+    body = req.body;
+  } catch {
+    throw new HttpError(400, 'invalid_json');
+  }
+  if (body !== undefined) {
+    if (Buffer.isBuffer(body)) return parseJson(body.toString('utf8'));
+    if (typeof body === 'string') return parseJson(body);
+    return body || {};
   }
 
   // Plain Node http (local dev server, tests): read the stream ourselves.

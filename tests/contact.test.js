@@ -125,3 +125,31 @@ test('works with a body Vercel has already parsed', async () => {
   assert.equal(res.statusCode, 200);
   assert.equal(sendEmail.calls.length, 1);
 });
+
+test('Vercel: malformed JSON (req.body getter throws) returns 400, not 500', async () => {
+  const { handler } = setup();
+  const { fakeRequest, fakeResponse } = require('./helpers');
+  const req = fakeRequest('POST');
+  Object.defineProperty(req, 'body', {
+    get() {
+      throw new Error('Invalid JSON');
+    },
+  });
+  const res = fakeResponse();
+  await handler(req, res);
+  assert.equal(res.statusCode, 400);
+  assert.equal(res.json.error, 'invalid_json');
+});
+
+test('Vercel: body over 20 KB is refused by its declared size', async () => {
+  const { handler, sendEmail } = setup();
+  const { fakeRequest, fakeResponse } = require('./helpers');
+  const req = fakeRequest('POST');
+  req.headers['content-length'] = String(30 * 1024);
+  req.body = validBody;
+  const res = fakeResponse();
+  await handler(req, res);
+  assert.equal(res.statusCode, 413);
+  assert.equal(res.json.error, 'payload_too_large');
+  assert.equal(sendEmail.calls.length, 0);
+});
