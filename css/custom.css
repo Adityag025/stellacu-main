@@ -2846,3 +2846,31 @@ main.mxd-page-content > .mxd-section.section-hero {
 main.mxd-page-content > .mxd-section > .mxd-container > .mxd-block:last-child > .mxd-section-title:last-child {
   margin-bottom: 0;
 }
+
+/* Service pages, "Architecture Notes" heading row: title, description and
+   button sit at their natural widths with equal space between them
+   (Insights keeps its card-grid alignment). */
+@media only screen and (min-width: 1200px) {
+  .architecture-notes-section:not(.insights-category) .mxd-section-title .row {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .architecture-notes-section:not(.insights-category) .mxd-section-title .row > [class*="col-"] {
+    flex: 0 1 auto;
+    width: auto;
+  }
+
+  .architecture-notes-section:not(.insights-category) .mxd-section-title__hrdescr {
+    max-width: 46rem;
+  }
+
+  /* Title and button keep one line; the description wraps when space is short */
+  .architecture-notes-section:not(.insights-category) .mxd-section-title .row > [class*="col-"]:not(:nth-child(2)) {
+    flex-shrink: 0;
+  }
+
+  .architecture-notes-section:not(.insights-category) .mxd-section-title h2 {
+    white-space: nowrap;
+  }
+}

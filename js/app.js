@@ -629,6 +629,46 @@ $(function() {
   // --------------------------------------------- //
 
   // --------------------------------------------- //
+  // Even Heading Row Spacing Start
+  // --------------------------------------------- //
+  // A wrapped paragraph keeps its full box width even when its lines are
+  // shorter, which makes the space after it look bigger than the space
+  // before it. Shrink each [data-shrink-wrap] element to its longest line
+  // so the heading row's space-between gaps (css/custom.css) look equal.
+  function shrinkWrap() {
+    $("[data-shrink-wrap]").each(function() {
+      this.style.width = "";
+      var range = document.createRange();
+      range.selectNodeContents(this);
+      // Text may be split into many spans (e.g. reveal-type animations),
+      // so group the rects into lines by their vertical position.
+      var rects = range.getClientRects();
+      var lines = {};
+      for (var i = 0; i < rects.length; i++) {
+        var key = Math.round(rects[i].top);
+        var line = lines[key] || (lines[key] = { left: rects[i].left, right: rects[i].right });
+        line.left = Math.min(line.left, rects[i].left);
+        line.right = Math.max(line.right, rects[i].right);
+      }
+      var widest = 0;
+      $.each(lines, function(key, line) {
+        widest = Math.max(widest, line.right - line.left);
+      });
+      if (widest) this.style.width = Math.ceil(widest) + "px";
+    });
+  }
+
+  var shrinkWrapTimer;
+  $(window).on("load", shrinkWrap).on("resize", function() {
+    clearTimeout(shrinkWrapTimer);
+    shrinkWrapTimer = setTimeout(shrinkWrap, 150);
+  });
+  if (document.fonts) document.fonts.ready.then(shrinkWrap);
+  // --------------------------------------------- //
+  // Even Heading Row Spacing End
+  // --------------------------------------------- //
+
+  // --------------------------------------------- //
   // Website Forms Start
   // --------------------------------------------- //
   // All forms post JSON to our serverless functions in /api (see api/ and
