@@ -1698,17 +1698,8 @@ body {
   }
 }
 
-/* Center and align Capabilities section title with stats cards, and add padding top */
-#capabilities .mxd-section-title {
-  padding-top: 6rem !important;
-}
-
-@media only screen and (min-width: 768px) {
-  #capabilities .mxd-section-title {
-    padding-top: 8rem !important;
-  }
-}
-
+/* Align Capabilities section title with the stats cards (spacing above
+   comes from the shared section gap at the end of this file) */
 @media only screen and (min-width: 1200px) {
   #capabilities .mxd-section-title {
     max-width: 100% !important;
@@ -1716,7 +1707,6 @@ body {
     margin-left: 0 !important;
     margin-right: 0 !important;
     width: 100% !important;
-    padding-top: 10rem !important;
   }
 }
 
@@ -2177,6 +2167,13 @@ body {
     align-items: stretch !important;
   }
 
+  /* Stack and card slots match the card, so no empty space is left under the stack */
+  .services-stack,
+  .services-stack .stack-item {
+    height: 480px !important;
+    min-height: 480px !important;
+  }
+
   .mxd-services-card__left {
     flex: 0 0 50% !important;
     /* Restore original 50% left column */
@@ -2233,6 +2230,12 @@ body {
     gap: 2.5rem !important;
     height: 620px !important;
     /* Adjusted for stacked content */
+  }
+
+  .services-stack,
+  .services-stack .stack-item {
+    height: 620px !important;
+    min-height: 620px !important;
   }
 
   .mxd-services-card__right {
@@ -2784,4 +2787,62 @@ section,
   font-size: 1.3rem;
   line-height: 1.4;
   color: var(--field-error);
+}
+
+/* ------------------------------------------------------------------ */
+/* Section spacing: one consistent gap between all page sections.      */
+/* Every section pads only its bottom by --section-gap; the next one   */
+/* starts flush. The first section keeps its top padding to clear the  */
+/* fixed header, and the last keeps the template's pre-footer spacing. */
+/* Banded sections (.section-band: background or divider lines) get    */
+/* even padding inside, and the section before a band stops at the     */
+/* same distance from the line.                                        */
+/* ------------------------------------------------------------------ */
+:root {
+  --section-gap: 9rem;
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --section-gap: 11rem;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  :root {
+    --section-gap: 13rem;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  :root {
+    --section-gap: 15rem;
+  }
+}
+
+main.mxd-page-content > .mxd-section:not(:first-child) {
+  padding-top: 0 !important;
+}
+
+main.mxd-page-content > .mxd-section:not(:last-child) {
+  padding-bottom: var(--section-gap) !important;
+}
+
+main.mxd-page-content > .mxd-section.section-band {
+  padding-top: calc(var(--section-gap) * 0.5) !important;
+  padding-bottom: calc(var(--section-gap) * 0.5) !important;
+}
+
+main.mxd-page-content > .mxd-section:has(+ .section-band) {
+  padding-bottom: calc(var(--section-gap) * 0.5) !important;
+}
+
+/* The full-screen home hero (.section-hero) sizes itself to the screen */
+main.mxd-page-content > .mxd-section.section-hero {
+  padding-bottom: 0 !important;
+}
+
+/* Last block in a section adds no space of its own below it */
+main.mxd-page-content > .mxd-section > .mxd-container > .mxd-block:last-child > .mxd-section-title:last-child {
+  margin-bottom: 0;
 }

@@ -5,9 +5,13 @@
   "description": "StellAcu Media website: static pages plus Vercel serverless functions for the forms.",
   "scripts": {
     "serve": "node scripts/dev-server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "test:site": "node --test --test-concurrency=1 \"tests/site/*.site.js\""
   },
   "engines": {
     "node": "22.x"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.16.0"
   }
 }

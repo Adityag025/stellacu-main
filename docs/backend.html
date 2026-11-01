@@ -159,16 +159,17 @@ automatically with every push to <code>main</code>; there is no separate server 
 js/app.js                    Front end: "Website Forms" section posts the forms to /api
 partials/footer.html         Footer subscribe form (name="email" + honeypot)
 
-tests/                       Automated tests (node --test), no network needed
+tests/                       API unit tests (npm test), no network needed
+tests/site/                  Browser tests for the whole site (npm run test:site)
 scripts/dev-server.js        Local server: static site + /api, reads .env.local
 docs/backend.html            This document
 .env.example                 Template for local settings (copy to .env.local)
 vercel.json                  Clean URLs: /about-us serves about-us.html; .html addresses 308-redirect
 .vercelignore                Keeps tests/, scripts/, docs/ off the live site
-package.json                 npm scripts + Node version (22.x). No dependencies.</code></pre>
+package.json                 npm scripts + Node version (22.x). Only dev dependency: puppeteer-core (browser tests).</code></pre>
 
 <p>The backend has <strong>no npm dependencies</strong>: it uses Node's built-in <code>fetch</code>,
-<code>crypto</code> and test runner. Nothing to install, nothing to keep updated.</p>
+<code>crypto</code> and test runner. The only package, <code>puppeteer-core</code>, is a dev dependency used by the browser tests.</p>
 
 <h2 id="endpoints">API endpoints</h2>
 <p>All endpoints take and return JSON. Every response has <code>ok</code>; failures add an
@@ -273,6 +274,31 @@ handlers directly with fake requests and fake email/Mailchimp clients, so they n
 and no keys. They cover validation rules, email content and escaping, every status code, the
 honeypot, the Mailchimp/email fallback, and the exact requests sent to Resend and Mailchimp.</p>
 <p>Run them before every push that touches <code>api/</code>.</p>
+
+<h3>Browser tests (whole site)</h3>
+<pre><code>npm install            # once: installs puppeteer-core (uses your installed Chrome)
+npm run serve          # terminal 1
+npm run test:site      # terminal 2
+BASE_URL=https://stellacu-main.vercel.app npm run test:site   # check production instead</code></pre>
+<p>These open the real pages in Chrome (<code>tests/site/*.site.js</code>) and check:</p>
+<div class="table-wrap">
+<table>
+  <tr><th>File</th><th>Checks</th></tr>
+  <tr><td><code>pages.site.js</code></td><td>Crawls from the home page: every page loads (200), has its header and footer, no broken internal links or assets, no <code>.html</code> in links; old <code>.html</code> addresses 308-redirect; unknown URLs get the 404 page.</td></tr>
+  <tr><td><code>fonts.site.js</code></td><td>All visible text is Poppins and every weight used is loaded, at desktop (1440px) and phone (390px) widths.</td></tr>
+  <tr><td><code>spacing.site.js</code></td><td>Every section follows the shared spacing rule, and no gap between sections is oversized, at both widths.</td></tr>
+  <tr><td><code>forms.site.js</code></td><td>All four forms: empty submit flags every field, each field's rule and message, valid data is sent, server field errors show under the field. API calls are intercepted, so no email is sent.</td></tr>
+</table>
+</div>
+<p>Set <code>CHROME_PATH</code> if Chrome is installed somewhere unusual. Run them before pushing layout or form changes.</p>
+
+<h3>Section spacing</h3>
+<p>All gaps between page sections come from one rule at the end of <code>css/custom.css</code> ("Section spacing"):
+each section after the first has no top padding and <code>--section-gap</code> of bottom padding
+(90px phone, 110px tablet, 130px laptop, 150px large screens). Sections with a background or divider lines
+get the class <code>section-band</code> and use half the gap on each side of the line. The full-screen home
+hero (<code>section-hero</code>) and the "Let's talk" section before the footer keep their own spacing.
+Do not add <code>padding</code> or <code>margin</code> to sections inline; change <code>--section-gap</code> instead.</p>
 
 <h2 id="changes">Common changes</h2>
 
