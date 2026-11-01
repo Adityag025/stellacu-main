@@ -629,88 +629,81 @@ $(function() {
   // --------------------------------------------- //
 
   // --------------------------------------------- //
-  // Mailchimp Subscribe Form Start
+  // Website Forms Start
   // --------------------------------------------- //
-  $('.notify-form').ajaxChimp({
-    callback: mailchimpCallback,
-    url: 'https://club.us10.list-manage.com/subscribe/post?u=e8d650c0df90e716c22ae4778&amp;id=54a7906900&amp;f_id=00b64ae4f0'
-  });
-
-  function mailchimpCallback(resp) {
-    if(resp.result === 'success') {
-      $('.notify').find('.form').addClass('is-hidden');
-      $('.notify').find('.subscription-ok').addClass('is-visible');
-      setTimeout(function() {
-        // Done Functions
-        $('.notify').find('.subscription-ok').removeClass('is-visible');
-        $('.notify').find('.form').delay(300).removeClass('is-hidden');
-        $('.notify-form').trigger("reset");
-      }, 5000);
-    } else if(resp.result === 'error') {
-      $('.notify').find('.form').addClass('is-hidden');
-      $('.notify').find('.subscription-error').addClass('is-visible');
-      setTimeout(function() {
-        // Done Functions
-        $('.notify').find('.subscription-error').removeClass('is-visible');
-        $('.notify').find('.form').delay(300).removeClass('is-hidden');
-        $('.notify-form').trigger("reset");
-      }, 5000);
-    }
-  };
-  // --------------------------------------------- //
-  // Mailchimp Subscribe Form End
-  // --------------------------------------------- //
-
-  // --------------------------------------------- //
-  // Contact Form Start
-  // --------------------------------------------- //
-  // Submissions go to Web3Forms (Vercel can't run mail.php). The access key
-  // is public by design; it only lets the form deliver to our inbox.
-  var WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
-
-  $("#contact-form, #audit-form").on("submit", function(e) {
-    e.preventDefault();
-    var th = $(this);
-    var reply = th.siblings(".form__reply");
-    var btn = th.find("[type=submit]");
-    var data = {
-      access_key: WEB3FORMS_KEY,
-      subject: th.data("subject") || "New website enquiry",
-      from_name: "StellAcu Media Website",
-      Page: window.location.pathname
-    };
-    $.each(th.serializeArray(), function(i, field) {
-      data[field.name] = field.value;
-    });
-    if (data.Email) data.replyto = data.Email;
-
-    btn.prop("disabled", true);
-    $.ajax({
+  // All forms post JSON to our serverless functions in /api (see api/ and
+  // docs/backend.html). The server decides where each submission goes.
+  function postJson(url, payload) {
+    return $.ajax({
       type: "POST",
-      url: "https://api.web3forms.com/submit",
+      url: url,
       contentType: "application/json",
       dataType: "json",
-      data: JSON.stringify(data)
-    }).done(function(res) {
-      if (!res || !res.success) return formFailed(res);
-      th.addClass("is-hidden");
-      reply.addClass("is-visible");
-      setTimeout(function() {
-        reply.removeClass("is-visible");
-        th.delay(300).removeClass("is-hidden");
-        th.trigger("reset");
-      }, 5000);
+      data: JSON.stringify(payload)
+    });
+  }
+
+  // Shows a reply message in place of the form for 5 seconds, then resets it.
+  function flashReply(form, reply) {
+    form.addClass("is-hidden");
+    reply.addClass("is-visible");
+    setTimeout(function() {
+      reply.removeClass("is-visible");
+      form.delay(300).removeClass("is-hidden");
+      form.trigger("reset");
+    }, 5000);
+  }
+
+  function formFailed(xhr) {
+    console.error("Form submission failed", xhr && xhr.responseJSON);
+    alert("Sorry, your message couldn't be sent. Please try again in a moment.");
+  }
+
+  // Growth Audit + landing page forms → POST /api/contact
+  // Each <form> names itself with data-form (matches api/_lib/forms.js).
+  $("#contact-form, #audit-form").on("submit", function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var btn = form.find("[type=submit]");
+    var fields = {};
+    $.each(form.serializeArray(), function(i, field) {
+      fields[field.name] = field.value;
+    });
+    var botcheck = fields.botcheck || "";
+    delete fields.botcheck;
+
+    btn.prop("disabled", true);
+    postJson("/api/contact", {
+      form: form.data("form"),
+      fields: fields,
+      page: window.location.pathname,
+      botcheck: botcheck
+    }).done(function() {
+      flashReply(form, form.siblings(".form__reply"));
     }).fail(formFailed).always(function() {
       btn.prop("disabled", false);
     });
   });
 
-  function formFailed(res) {
-    console.error("Form submission failed", res);
-    alert("Sorry, your message couldn't be sent. Please try again in a moment.");
-  }
+  // Footer newsletter → POST /api/subscribe
+  $(".notify-form").on("submit", function(e) {
+    e.preventDefault();
+    var form = $(this);
+    var box = form.closest(".notify");
+
+    postJson("/api/subscribe", {
+      email: form.find("[name=email]").val(),
+      page: window.location.pathname,
+      botcheck: form.find("[name=botcheck]").is(":checked") ? "on" : ""
+    }).done(function() {
+      flashReply(form, box.find(".subscription-ok"));
+    }).fail(function(xhr) {
+      console.error("Subscribe failed", xhr && xhr.responseJSON);
+      flashReply(form, box.find(".subscription-error"));
+    });
+  });
   // --------------------------------------------- //
-  // Contact Form End
+  // Website Forms End
   // --------------------------------------------- //
   
 });

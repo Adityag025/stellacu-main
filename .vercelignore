@@ -1,0 +1,6 @@
+# Files that are only for developers and should not be served on the website.
+tests/
+scripts/
+docs/
+.env.example
+*.md

@@ -3,3 +3,9 @@ node_modules/
 Thumbs.db
 .gemini/
 *.log
+
+# Local secrets and Vercel CLI state
+.env
+.env.local
+.env.*.local
+.vercel/

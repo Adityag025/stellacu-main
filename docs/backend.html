@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StellAcu Website Backend</title>
+<style>
+  :root {
+    --bg: #faf7f6; --surface: #ffffff; --text: #161616; --muted: #5d5d5d;
+    --border: #e4dfdd; --accent: #004990; --code-bg: #f1eeec; --ok: #1d7a3e; --warn: #9a5b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161616; --surface: #1f1f1f; --text: #f1f1f1; --muted: #a9a9a9;
+      --border: #333; --accent: #6aa7e8; --code-bg: #262626; --ok: #5cc483; --warn: #e0a84a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  .page { max-width: 920px; margin: 0 auto; padding: 48px 20px 80px; }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
+  h1 { font-size: 32px; margin: 0 0 8px; }
+  h2 { font-size: 22px; margin: 48px 0 12px; padding-top: 8px; }
+  h3 { font-size: 17px; margin: 28px 0 8px; }
+  p, li { color: var(--text); }
+  .lead { color: var(--muted); font-size: 18px; margin: 0; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  nav a {
+    font-size: 14px; color: var(--accent); text-decoration: none;
+    border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; background: var(--surface);
+  }
+  a { color: var(--accent); }
+  code, pre { font-family: Consolas, "SF Mono", Menlo, monospace; font-size: 14px; }
+  code { background: var(--code-bg); padding: 1px 6px; border-radius: 4px; }
+  pre {
+    background: var(--code-bg); padding: 16px; border-radius: 8px;
+    overflow-x: auto; line-height: 1.5; border: 1px solid var(--border);
+  }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+  .table-wrap { overflow-x: auto; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px; margin: 16px 0;
+  }
+  .card.todo { border-left: 4px solid var(--warn); }
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 16px 0; }
+  .flow div {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px; font-size: 14px;
+  }
+  .flow strong { display: block; font-size: 13px; color: var(--accent); margin-bottom: 4px; }
+  .tag { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+  .tag.ok { color: var(--ok); } .tag.warn { color: var(--warn); }
+  ol li, ul li { margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Website backend</h1>
+  <p class="lead">How the StellAcu Media website handles its forms: what runs where, how to set it up, and how to change it.</p>
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#setup">Setup</a>
+    <a href="#structure">Folder structure</a>
+    <a href="#endpoints">API endpoints</a>
+    <a href="#frontend">Front end</a>
+    <a href="#local">Local development</a>
+    <a href="#tests">Tests</a>
+    <a href="#changes">Common changes</a>
+    <a href="#security">Security</a>
+  </nav>
+</header>
+
+<h2 id="overview">Overview</h2>
+<p>The site is static HTML hosted on Vercel. The only server-side code is a set of
+<strong>Vercel serverless functions</strong> in the <code>api/</code> folder. Vercel deploys them
+automatically with every push to <code>main</code>; there is no separate server to run or maintain.</p>
+
+<div class="flow">
+  <div><strong>1. Browser</strong>Visitor submits a form. <code>js/app.js</code> sends JSON to <code>/api/…</code></div>
+  <div><strong>2. API function</strong>Checks the method, honeypot and every field against <code>api/_lib/forms.js</code></div>
+  <div><strong>3. Provider</strong>Emails the team through Resend, or adds the subscriber to Mailchimp</div>
+  <div><strong>4. Browser</strong>Shows the thank-you message, or an error if something failed</div>
+</div>
+
+<p>There is no database. Enquiries arrive as emails in the team inbox, with the visitor set as
+<em>reply-to</em> so you can answer directly.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Form</th><th>Page</th><th>Endpoint</th><th>Goes to</th></tr>
+  <tr><td>Start a Growth Audit</td><td><code>start-a-growth-audit.html</code></td><td><code>/api/contact</code></td><td>Email to <code>MAIL_TO</code></td></tr>
+  <tr><td>Growth Audit request</td><td><code>landing-1.html</code></td><td><code>/api/contact</code></td><td>Email to <code>MAIL_TO</code></td></tr>
+  <tr><td>Growth Audit request</td><td><code>landing-2.html</code></td><td><code>/api/contact</code></td><td>Email to <code>MAIL_TO</code></td></tr>
+  <tr><td>Subscribe to our insights</td><td>Footer, every page</td><td><code>/api/subscribe</code></td><td>Mailchimp if set up, otherwise email to <code>MAIL_TO</code></td></tr>
+</table>
+</div>
+
+<h2 id="setup">Setup (one time)</h2>
+<div class="card todo">
+  <p><span class="tag warn">Required</span>&nbsp; Until these settings exist, the forms answer
+  <code>not_configured</code> and visitors see an error message.</p>
+</div>
+
+<h3>1. Email sending (Resend)</h3>
+<ol>
+  <li>Create an account at <a href="https://resend.com">resend.com</a>.</li>
+  <li><strong>Domains → Add domain</strong> → <code>stellacumedia.com</code>, then add the DNS records it shows
+      at your domain registrar. Wait until the domain shows <em>Verified</em>.</li>
+  <li><strong>API Keys → Create API key</strong> (permission: <em>Sending access</em>). Copy it.</li>
+</ol>
+
+<h3>2. Environment variables on Vercel</h3>
+<p>Vercel → the project → <strong>Settings → Environment Variables</strong>. Add each one for the
+<em>Production</em> environment (and <em>Preview</em> if you want preview deploys to send email):</p>
+<div class="table-wrap">
+<table>
+  <tr><th>Name</th><th>Example</th><th>Needed for</th></tr>
+  <tr><td><code>RESEND_API_KEY</code></td><td><code>re_…</code></td><td>All forms</td></tr>
+  <tr><td><code>MAIL_FROM</code></td><td><code>StellAcu Website &lt;website@stellacumedia.com&gt;</code></td><td>All forms (domain must be verified in Resend)</td></tr>
+  <tr><td><code>MAIL_TO</code></td><td><code>sales@stellacumedia.com</code></td><td>All forms (comma-separate several inboxes)</td></tr>
+  <tr><td><code>MAILCHIMP_API_KEY</code></td><td><code>abc123…-us10</code></td><td>Optional: newsletter into Mailchimp</td></tr>
+  <tr><td><code>MAILCHIMP_AUDIENCE_ID</code></td><td><code>a1b2c3d4e5</code></td><td>Optional: newsletter into Mailchimp</td></tr>
+  <tr><td><code>MAILCHIMP_DOUBLE_OPT_IN</code></td><td><code>true</code></td><td>Optional (default <code>true</code>: subscribers confirm by email first)</td></tr>
+</table>
+</div>
+<p>Then <strong>Deployments → … → Redeploy</strong> the latest deployment so the functions pick up the new values.</p>
+
+<h3>3. Check it</h3>
+<p>Open <code>https://&lt;your-domain&gt;/api/health</code>. You should see:</p>
+<pre><code>{ "ok": true, "email": true, "newsletter": "email" }   // or "mailchimp"</code></pre>
+<p>Then send a test enquiry from the Start a Growth Audit page and confirm it arrives.</p>
+
+<h2 id="structure">Folder structure</h2>
+<pre><code>api/                         Vercel serverless functions (each file = one URL)
+  contact.js                 POST /api/contact    – audit + landing forms
+  subscribe.js               POST /api/subscribe  – footer newsletter
+  health.js                  GET  /api/health     – which integrations are configured
+  _lib/                      Shared code. "_" means Vercel does not expose it as a URL.
+    config.js                Reads environment variables
+    http.js                  JSON responses, body parsing, method + error handling
+    errors.js                HttpError (sent to browser) and ProviderError (logged)
+    forms.js                 Every form: its subject line and allowed/required fields
+    validation.js            Field types and validation rules
+    email-templates.js       The notification email (HTML + plain text)
+    request.js               Reads common parts of a submission (page path)
+    providers/
+      resend.js              Sends email via Resend
+      mailchimp.js           Adds subscribers to Mailchimp
+
+js/app.js                    Front end: "Website Forms" section posts the forms to /api
+partials/footer.html         Footer subscribe form (name="email" + honeypot)
+
+tests/                       Automated tests (node --test), no network needed
+scripts/dev-server.js        Local server: static site + /api, reads .env.local
+docs/backend.html            This document
+.env.example                 Template for local settings (copy to .env.local)
+.vercelignore                Keeps tests/, scripts/, docs/ off the live site
+package.json                 npm scripts + Node version (22.x). No dependencies.</code></pre>
+
+<p>The backend has <strong>no npm dependencies</strong>: it uses Node's built-in <code>fetch</code>,
+<code>crypto</code> and test runner. Nothing to install, nothing to keep updated.</p>
+
+<h2 id="endpoints">API endpoints</h2>
+<p>All endpoints take and return JSON. Every response has <code>ok</code>; failures add an
+<code>error</code> code and, for validation errors, a <code>fields</code> object with one message per field.</p>
+
+<h3>POST /api/contact</h3>
+<pre><code>{
+  "form": "growth-audit",          // "growth-audit" | "landing-1" | "landing-2"
+  "fields": {
+    "name": "Asha Rao",
+    "email": "asha@example.com",
+    "phone": "+91 98765 43210",
+    "company": "Acme",
+    "message": "…"
+  },
+  "page": "/start-a-growth-audit.html",
+  "botcheck": ""                   // honeypot, must be empty
+}</code></pre>
+<p>Which fields are accepted and required depends on <code>form</code>, see <code>api/_lib/forms.js</code>.</p>
+
+<h3>POST /api/subscribe</h3>
+<pre><code>{ "email": "reader@example.com", "page": "/index.html", "botcheck": "" }</code></pre>
+
+<h3>GET /api/health</h3>
+<pre><code>{ "ok": true, "email": true, "newsletter": "mailchimp" | "email" | "none" }</code></pre>
+<p>Only reports true/false; never shows setting values.</p>
+
+<h3>Status codes</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>Status</th><th><code>error</code></th><th>Meaning</th></tr>
+  <tr><td>200</td><td>–</td><td>Accepted and delivered (honeypot hits also get 200 but nothing is sent)</td></tr>
+  <tr><td>400</td><td><code>invalid_json</code>, <code>unknown_form</code></td><td>Malformed request or unknown form key</td></tr>
+  <tr><td>405</td><td><code>method_not_allowed</code></td><td>Wrong HTTP method (see the <code>Allow</code> header)</td></tr>
+  <tr><td>413</td><td><code>payload_too_large</code></td><td>Body over 20 KB</td></tr>
+  <tr><td>422</td><td><code>validation_failed</code></td><td>One or more fields invalid; see <code>fields</code></td></tr>
+  <tr><td>502</td><td><code>delivery_failed</code></td><td>Resend or Mailchimp refused the request (details in Vercel logs)</td></tr>
+  <tr><td>503</td><td><code>not_configured</code></td><td>Environment variables missing (the log says which)</td></tr>
+</table>
+</div>
+
+<h2 id="frontend">Front end</h2>
+<p>The <em>Website Forms</em> section of <code>js/app.js</code> handles all four forms:</p>
+<ul>
+  <li><code>#contact-form</code> and <code>#audit-form</code>: collects every named input, sends
+      <code>{ form: data-form, fields, page, botcheck }</code> to <code>/api/contact</code>.</li>
+  <li><code>.notify-form</code> (footer): sends the email to <code>/api/subscribe</code>.</li>
+  <li>On success the form's <code>.form__reply</code> message shows for 5 seconds, then the form resets.
+      On failure the contact forms show an alert and the footer shows its error message.</li>
+</ul>
+<p>In the HTML, the input <code>name</code> attributes must match the field names in
+<code>api/_lib/forms.js</code> (all lower case), and each contact form needs a <code>data-form</code> attribute.</p>
+
+<h2 id="local">Local development</h2>
+<p>Requires Node.js 22 or newer.</p>
+<pre><code>cp .env.example .env.local     # optional: fill in real keys to send real emails
+npm run serve                  # http://localhost:3000</code></pre>
+<p>This serves the site and the API exactly as Vercel does. Without <code>.env.local</code> the
+forms answer <code>not_configured</code>, which is fine for layout work. Use a different port with
+<code>PORT=4000 npm run serve</code>.</p>
+<p>Alternatively, with the Vercel CLI: <code>vercel dev</code> (uses the environment variables from your Vercel project).</p>
+<p>Opening the HTML files directly from disk (<code>file://</code>) does not work: the header/footer
+includes and the API both need a web server.</p>
+
+<h2 id="tests">Tests</h2>
+<pre><code>npm test</code></pre>
+<p>Runs everything in <code>tests/</code> with Node's built-in test runner. The tests call the
+handlers directly with fake requests and fake email/Mailchimp clients, so they need no network
+and no keys. They cover validation rules, email content and escaping, every status code, the
+honeypot, the Mailchimp/email fallback, and the exact requests sent to Resend and Mailchimp.</p>
+<p>Run them before every push that touches <code>api/</code>.</p>
+
+<h2 id="changes">Common changes</h2>
+
+<h3>Add a field to an existing form</h3>
+<ol>
+  <li>Add it to the form in <code>api/_lib/forms.js</code>, e.g.
+      <code>role: { label: 'Role', type: 'text' }</code>.
+      Types: <code>text</code>, <code>longText</code>, <code>email</code>, <code>phone</code>, <code>url</code>, <code>choice</code> (with <code>options</code>).</li>
+  <li>Add the input to the HTML with <code>name="role"</code>.</li>
+  <li>Add or update a test, run <code>npm test</code>.</li>
+</ol>
+<p>A field in the HTML that is not in <code>forms.js</code> is silently ignored, so step 1 is required.</p>
+
+<h3>Add a new form</h3>
+<ol>
+  <li>Add a new key in <code>api/_lib/forms.js</code> with its <code>subject</code> and <code>fields</code>.</li>
+  <li>In the HTML: <code>&lt;form id="contact-form" data-form="your-key"&gt;</code>, a hidden
+      <code>botcheck</code> checkbox (copy it from an existing form), the inputs, and a sibling
+      <code>.form__reply</code> element with the thank-you text.</li>
+  <li>If the form needs a different id, add it to the selector in the Website Forms section of <code>js/app.js</code>.</li>
+</ol>
+
+<h3>Change where enquiries go</h3>
+<p>Change <code>MAIL_TO</code> on Vercel and redeploy. No code change.</p>
+
+<h3>Switch email provider</h3>
+<p>Write <code>api/_lib/providers/&lt;name&gt;.js</code> exporting <code>sendEmail()</code> with the same
+arguments as <code>resend.js</code>, then change the <code>require</code> in <code>api/contact.js</code>
+and <code>api/subscribe.js</code>. Nothing else depends on Resend.</p>
+
+<h3>See errors in production</h3>
+<p>Vercel → the project → <strong>Logs</strong> (filter by <code>/api/</code>). Handlers log
+<code>[contact]</code> / <code>[subscribe]</code> lines with the reason for every 502 and 503.</p>
+
+<h2 id="security">Security notes</h2>
+<ul>
+  <li>API keys live only in Vercel environment variables, never in the code or the browser.
+      <code>.env.local</code> is git-ignored.</li>
+  <li>The email subject and the list of accepted fields are fixed on the server; visitors cannot change them.</li>
+  <li>Every field is length-limited and type-checked; visitor text is HTML-escaped in the email.</li>
+  <li>Spam protection is a honeypot checkbox. If spam becomes a problem, add a rate-limit rule in
+      Vercel → Firewall for <code>/api/*</code>, or add a CAPTCHA (e.g. Cloudflare Turnstile) and verify it in the handler.</li>
+  <li>Request bodies over 20 KB are rejected.</li>
+</ul>
+
+</div>
+</body>
+</html>
