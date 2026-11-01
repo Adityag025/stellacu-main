@@ -663,33 +663,58 @@ $(function() {
   // Field validation. Same rules and messages as api/_lib/validation.js, so
   // visitors see problems under the field before anything is sent. The
   // server still checks everything again.
-  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var PHONE_RE = /^[+()\d\s.-]{6,30}$/;
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+  var PHONE_CHARS_RE = /^\+?[\d\s().-]+$/;
+  var NAME_RE = /^[\p{L}\p{M}]+(?:[\s'’.-]+[\p{L}\p{M}]+)*\.?$/u;
+  var TLD_RE = /\.(?:[a-z]{2,}|xn--[a-z\d-]+)$/;
+
+  function isName(value) {
+    return NAME_RE.test(value.replace(/\s+/g, " "));
+  }
+
+  function isEmail(value) {
+    return EMAIL_RE.test(value) && value.indexOf("..") === -1;
+  }
+
+  function isPhone(value) {
+    var digits = value.replace(/\D/g, "").length;
+    return PHONE_CHARS_RE.test(value) && digits >= 7 && digits <= 15;
+  }
 
   function isWebsite(value) {
     var withScheme = /^[a-z][a-z\d+.-]*:\/\//i.test(value) ? value : "https://" + value;
     try {
       var url = new URL(withScheme);
-      return (url.protocol === "http:" || url.protocol === "https:") && url.hostname.indexOf(".") > 0;
+      return (url.protocol === "http:" || url.protocol === "https:") && TLD_RE.test(url.hostname);
     } catch (err) {
       return false;
     }
   }
 
-  // Rules by input type; maxLength matches the server limits.
+  // One rule per field type, matching FIELD_TYPES in api/_lib/validation.js.
   var FIELD_RULES = {
-    email: { maxLength: 254, test: function(v) { return EMAIL_RE.test(v); }, message: "Enter a valid email address." },
-    tel: { maxLength: 30, test: function(v) { return PHONE_RE.test(v); }, message: "Enter a valid phone number." },
-    url: { maxLength: 500, test: isWebsite, message: "Enter a valid website address." },
-    textarea: { maxLength: 5000 },
-    select: {},
-    text: { maxLength: 200 }
+    name: { minLength: 2, maxLength: 100, test: isName, message: "Use letters only (spaces, apostrophes and hyphens are fine)." },
+    text: { minLength: 2, maxLength: 200 },
+    longText: { minLength: 10, maxLength: 5000 },
+    email: { maxLength: 254, test: isEmail, message: "Enter a valid email address." },
+    phone: { maxLength: 30, test: isPhone, message: "Enter a valid phone number (7 to 15 digits)." },
+    url: { maxLength: 500, test: isWebsite, message: "Enter a valid website address, e.g. example.com." },
+    choice: {}
+  };
+
+  // Which rule each form field uses (by its name attribute), as in api/_lib/forms.js.
+  var FIELD_TYPE_BY_NAME = {
+    name: "name",
+    email: "email",
+    phone: "phone",
+    company: "text",
+    message: "longText",
+    website: "url",
+    budget: "choice"
   };
 
   function ruleFor(input) {
-    if (input.is("textarea")) return FIELD_RULES.textarea;
-    if (input.is("select")) return FIELD_RULES.select;
-    return FIELD_RULES[input.attr("type")] || FIELD_RULES.text;
+    return FIELD_RULES[FIELD_TYPE_BY_NAME[input.attr("name")]] || FIELD_RULES.text;
   }
 
   // Returns the error message for a field, or "" when it is valid.
@@ -700,6 +725,9 @@ $(function() {
       return input.is("select") ? "Please choose an option." : "This field is required.";
     }
     var rule = ruleFor(input);
+    if (rule.minLength && value.length < rule.minLength) {
+      return "Please enter at least " + rule.minLength + " characters.";
+    }
     if (rule.maxLength && value.length > rule.maxLength) {
       return "Please use " + rule.maxLength + " characters or fewer.";
     }

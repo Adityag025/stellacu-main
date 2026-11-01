@@ -6,7 +6,7 @@ const { call, testConfig, spy, quietConsole } = require('./helpers');
 const validBody = {
   form: 'growth-audit',
   page: '/start-a-growth-audit.html',
-  fields: { name: 'Asha', email: 'Asha@Example.com', phone: '', company: 'Acme', message: 'Hello' },
+  fields: { name: 'Asha', email: 'Asha@Example.com', phone: '+91 98765 43210', company: 'Acme', message: 'Please call me about an audit.' },
 };
 
 function setup(overrides = {}) {
@@ -39,11 +39,11 @@ test('each landing page form is accepted', async () => {
   const { handler, sendEmail } = setup();
   const landing1 = await call(handler, 'POST', {
     form: 'landing-1',
-    fields: { name: 'A', email: 'a@example.com', website: 'acme.com', budget: 'over-100k' },
+    fields: { name: 'Asha', email: 'a@example.com', phone: '9876543210', website: 'acme.com', budget: 'over-100k' },
   });
   const landing2 = await call(handler, 'POST', {
     form: 'landing-2',
-    fields: { name: 'A', email: 'a@example.com', website: 'https://acme.com' },
+    fields: { name: 'Asha', email: 'a@example.com', website: 'https://acme.com' },
   });
   assert.equal(landing1.statusCode, 200);
   assert.equal(landing2.statusCode, 200);
@@ -70,7 +70,7 @@ test('invalid fields return 422 with per-field messages', async () => {
   const res = await call(handler, 'POST', { form: 'growth-audit', fields: { email: 'nope' } });
   assert.equal(res.statusCode, 422);
   assert.equal(res.json.error, 'validation_failed');
-  assert.deepEqual(Object.keys(res.json.fields).sort(), ['company', 'email', 'name']);
+  assert.deepEqual(Object.keys(res.json.fields).sort(), ['company', 'email', 'message', 'name', 'phone']);
   assert.equal(sendEmail.calls.length, 0);
 });
 

@@ -25,11 +25,11 @@ const FORMS = {
   'growth-audit': {
     subject: 'New enquiry: Start a Growth Audit page',
     fields: {
-      name: { label: 'Name', type: 'text', required: true },
+      name: { label: 'Name', type: 'name', required: true },
       email: { label: 'Email', type: 'email', required: true },
-      phone: { label: 'Phone', type: 'phone' },
+      phone: { label: 'Phone', type: 'phone', required: true },
       company: { label: 'Company', type: 'text', required: true },
-      message: { label: 'Message', type: 'longText' },
+      message: { label: 'Message', type: 'longText', required: true },
     },
   },
 
@@ -37,9 +37,9 @@ const FORMS = {
   'landing-1': {
     subject: 'New Growth Audit request: Landing page 1',
     fields: {
-      name: { label: 'Name', type: 'text', required: true },
+      name: { label: 'Name', type: 'name', required: true },
       email: { label: 'Email', type: 'email', required: true },
-      phone: { label: 'Phone', type: 'phone' },
+      phone: { label: 'Phone', type: 'phone', required: true },
       website: { label: 'Website', type: 'url', required: true },
       budget: { label: 'Monthly budget', type: 'choice', required: true, options: BUDGET_OPTIONS },
     },
@@ -49,7 +49,7 @@ const FORMS = {
   'landing-2': {
     subject: 'New Growth Audit request: Landing page 2',
     fields: {
-      name: { label: 'Name', type: 'text', required: true },
+      name: { label: 'Name', type: 'name', required: true },
       email: { label: 'Email', type: 'email', required: true },
       website: { label: 'Website', type: 'url', required: true },
     },

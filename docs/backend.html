@@ -221,15 +221,21 @@ package.json                 npm scripts + Node version (22.x). No dependencies.
 
 <h3>Field validation in the browser</h3>
 <p>Before anything is sent, every field is checked with the same rules and messages as
-<code>api/_lib/validation.js</code>. The rule comes from the input itself:</p>
+<code>api/_lib/validation.js</code>. <strong>Every field on every form is required.</strong>
+Which rule a field uses comes from its <code>name</code> (<code>FIELD_TYPE_BY_NAME</code> in <code>js/app.js</code>,
+the <code>type</code> in <code>api/_lib/forms.js</code>):</p>
 <div class="table-wrap">
 <table>
-  <tr><th>Input</th><th>Rule</th><th>Message</th></tr>
-  <tr><td>any with <code>required</code></td><td>not empty</td><td>This field is required. / Please choose an option.</td></tr>
-  <tr><td><code>type="email"</code></td><td>name@domain.tld, max 254</td><td>Enter a valid email address.</td></tr>
-  <tr><td><code>type="tel"</code></td><td>digits, spaces, + ( ) . -, 6–30 characters</td><td>Enter a valid phone number.</td></tr>
-  <tr><td><code>type="url"</code></td><td>a domain like acme.com (https:// optional), max 500</td><td>Enter a valid website address.</td></tr>
-  <tr><td>text / textarea</td><td>max 200 / 5000 characters</td><td>Please use N characters or fewer.</td></tr>
+  <tr><th>Field</th><th>Rule</th><th>Message</th></tr>
+  <tr><td>any, when empty</td><td>required</td><td>This field is required. / Please choose an option.</td></tr>
+  <tr><td><code>name</code></td><td>letters in any language, spaces, apostrophes, hyphens, dots; 2–100 characters</td><td>Use letters only (spaces, apostrophes and hyphens are fine).</td></tr>
+  <tr><td><code>email</code></td><td>name@domain.tld with a letter TLD of 2+ characters, no "..", max 254</td><td>Enter a valid email address.</td></tr>
+  <tr><td><code>phone</code></td><td>7–15 digits; spaces, ( ) . - allowed, + only at the start</td><td>Enter a valid phone number (7 to 15 digits).</td></tr>
+  <tr><td><code>company</code></td><td>2–200 characters, anything allowed (3M, AT&amp;T)</td><td>Please enter at least 2 characters.</td></tr>
+  <tr><td><code>message</code></td><td>10–5000 characters</td><td>Please enter at least 10 characters.</td></tr>
+  <tr><td><code>website</code></td><td>public domain like acme.com (https:// optional); no IPs, no localhost, max 500</td><td>Enter a valid website address, e.g. example.com.</td></tr>
+  <tr><td><code>budget</code></td><td>one of the listed options</td><td>Please choose an option.</td></tr>
+  <tr><td>too long</td><td>over the field's maximum</td><td>Please use N characters or fewer.</td></tr>
 </table>
 </div>
 <ul>
@@ -270,7 +276,8 @@ honeypot, the Mailchimp/email fallback, and the exact requests sent to Resend an
 <ol>
   <li>Add it to the form in <code>api/_lib/forms.js</code>, e.g.
       <code>role: { label: 'Role', type: 'text' }</code>.
-      Types: <code>text</code>, <code>longText</code>, <code>email</code>, <code>phone</code>, <code>url</code>, <code>choice</code> (with <code>options</code>).</li>
+      Types: <code>name</code>, <code>text</code>, <code>longText</code>, <code>email</code>, <code>phone</code>, <code>url</code>, <code>choice</code> (with <code>options</code>).</li>
+  <li>In <code>js/app.js</code>, add the field name to <code>FIELD_TYPE_BY_NAME</code> with the same type.</li>
   <li>Add the input to the HTML with <code>name="role"</code>.</li>
   <li>Add or update a test, run <code>npm test</code>.</li>
 </ol>
