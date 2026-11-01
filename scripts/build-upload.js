@@ -5,9 +5,10 @@
  *   npm run build:upload
  *
  * Leaves out developer files (tests, docs, scripts, node_modules), the
- * unused template pages and source files, and the api/ folder: shared
- * hosting cannot run the Node.js form backend, so the forms post to the
- * Vercel deployment instead (see API_HOST in js/app.js).
+ * unused template pages and source files, and the Node.js api/ folder
+ * (Vercel only). The PHP form API (php-api/) is included, except
+ * php-api/config.local.php: it holds the mailbox password and is uploaded
+ * once, separately.
  */
 
 const fs = require('node:fs');
@@ -36,7 +37,7 @@ const PAGES = [
   'landing-2.html',
 ];
 
-const FOLDERS = ['insights', 'partials', 'css', 'js', 'fonts', 'img', 'video'];
+const FOLDERS = ['insights', 'partials', 'css', 'js', 'fonts', 'img', 'video', 'php-api'];
 
 const EXTRA_FILES = ['.htaccess'];
 
@@ -49,6 +50,7 @@ for (const file of [...PAGES, ...EXTRA_FILES]) {
 for (const folder of FOLDERS) {
   fs.cpSync(path.join(ROOT, folder), path.join(OUT, folder), { recursive: true });
 }
+fs.rmSync(path.join(OUT, 'php-api', 'config.local.php'), { force: true });
 
 // Every page must be in the list above, so a new page is never left out.
 const missing = fs

@@ -12,3 +12,6 @@ Thumbs.db
 
 # Upload bundle (npm run build:upload)
 dist/
+
+# PHP API secrets (only on the server)
+php-api/config.local.php

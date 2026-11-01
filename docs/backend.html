@@ -337,35 +337,48 @@ and <code>api/subscribe.js</code>. Nothing else depends on Resend.</p>
 <p>Vercel → the project → <strong>Logs</strong> (filter by <code>/api/</code>). Handlers log
 <code>[contact]</code> / <code>[subscribe]</code> lines with the reason for every 502 and 503.</p>
 
-<h2 id="hosting">Hosting on shared hosting (cPanel etc.)</h2>
-<p>Shared hosting serves the pages but cannot run the Node.js functions in <code>api/</code>.
-So the pages go on the hosting and the form API stays on Vercel:</p>
+<h2 id="hosting">Hosting on shared hosting (Hostinger)</h2>
+<p>The live site <code>stellacumedia.com</code> runs on Hostinger shared hosting. It serves the pages and runs the
+<strong>PHP form API</strong> in <code>php-api/</code> (shared hosting runs PHP, not Node.js). The PHP API answers the
+same addresses as the Node.js one on Vercel (<code>/api/contact</code>, <code>/api/subscribe</code>, <code>/api/health</code>),
+with the same JSON responses and validation messages, and sends email through the Hostinger mailbox
+<code>sales@stellacumedia.com</code>. The Vercel deployment stays as a preview with its Node.js API.</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>File</th><th>Role</th></tr>
+  <tr><td><code>php-api/contact.php</code>, <code>subscribe.php</code>, <code>health.php</code></td><td>The three endpoints (mirror <code>api/*.js</code>)</td></tr>
+  <tr><td><code>php-api/_validation.php</code>, <code>_forms.php</code></td><td>Same rules/messages and form definitions as <code>api/_lib/validation.js</code> / <code>forms.js</code>; keep them in sync</td></tr>
+  <tr><td><code>php-api/_email.php</code></td><td>Notification email + SMTP over SSL to <code>smtp.hostinger.com:465</code>; optional Mailchimp</td></tr>
+  <tr><td><code>php-api/_ratelimit.php</code></td><td>Spam protection: 5 submissions per visitor per 10 minutes (429 <code>too_many_requests</code>)</td></tr>
+  <tr><td><code>php-api/config.local.php</code></td><td>Mailbox password and settings. <strong>Only on the server</strong>: git-ignored, not in the upload bundle. Create it from <code>config.example.php</code></td></tr>
+</table>
+</div>
+
 <ol>
   <li><strong>Build the upload:</strong> <code>npm run build:upload</code> copies exactly the needed files to
       <code>dist/upload/</code> (17 pages, <code>insights/</code>, <code>partials/</code>, <code>css/</code>, <code>js/</code>,
-      <code>fonts/</code>, <code>img/</code>, <code>video/</code>, <code>.htaccess</code>). Zip that folder's contents.</li>
-  <li><strong>Upload:</strong> cPanel → File Manager → <code>public_html</code> → Upload the ZIP → Extract.
-      <code>index.html</code> and <code>.htaccess</code> must end up directly in <code>public_html</code>
-      (turn on "Show hidden files" to see <code>.htaccess</code>).</li>
-  <li><strong>HTTPS:</strong> enable the free SSL certificate (cPanel → SSL/TLS Status or "Let's Encrypt").</li>
-  <li><strong>Forms:</strong> on any domain other than <code>*.vercel.app</code>, <code>js/app.js</code> sends form data to
-      <code>API_HOST</code> (the Vercel deployment). Vercel only accepts browsers from the domains in
-      <code>ALLOWED_ORIGINS</code> (default <code>https://stellacumedia.com</code> and <code>https://www.stellacumedia.com</code>);
-      set that variable on Vercel if the domain differs. The Resend settings are still set on Vercel.</li>
-  <li><strong>Check:</strong> <code>BASE_URL=https://stellacumedia.com npm run test:site</code>.</li>
+      <code>fonts/</code>, <code>img/</code>, <code>video/</code>, <code>php-api/</code>, <code>.htaccess</code>).</li>
+  <li><strong>Upload</strong> to <code>public_html</code> (hPanel File Manager, or FTPS). <code>index.html</code> and
+      <code>.htaccess</code> must be directly in <code>public_html</code>.</li>
+  <li><strong>Once:</strong> upload <code>php-api/config.local.php</code> with the mailbox password.</li>
+  <li><strong>Check:</strong> <code>https://stellacumedia.com/api/health</code> shows <code>"email": true, "backend": "php"</code>, and
+      <code>node --test tests/site/api-parity.site.js</code> confirms the PHP and Node APIs answer identically.
+      (Hostinger's bot check blocks headless Chrome, so run the page tests against a local copy or Vercel.)</li>
 </ol>
-<p><code>.htaccess</code> does what <code>vercel.json</code> does on Vercel: clean URLs (<code>/about-us</code> serves
-<code>about-us.html</code>, including <code>/partials/header</code>), 301 redirects from old <code>.html</code> addresses,
-HTTPS, the 404 page, compression and browser caching. Keep the Vercel project: it hosts the form API.</p>
+<p><code>.htaccess</code> routes <code>/api/…</code> to <code>php-api/</code>, blocks direct access to <code>php-api/</code>, and does what
+<code>vercel.json</code> does on Vercel: clean URLs (<code>/about-us</code> serves <code>about-us.html</code>, including
+<code>/partials/header</code>), 301 redirects from old <code>.html</code> addresses, HTTPS, the 404 page, compression, caching,
+and refusing backups, hidden files and developer folders.</p>
 
 <h2 id="security">Security notes</h2>
 <ul>
-  <li>API keys live only in Vercel environment variables, never in the code or the browser.
-      <code>.env.local</code> is git-ignored.</li>
+  <li>Secrets never go in the code or the browser: on Vercel in environment variables, on Hostinger in
+      <code>php-api/config.local.php</code> (blocked from the web). <code>.env.local</code> and <code>config.local.php</code> are git-ignored.</li>
   <li>The email subject and the list of accepted fields are fixed on the server; visitors cannot change them.</li>
   <li>Every field is length-limited and type-checked; visitor text is HTML-escaped in the email.</li>
-  <li>Spam protection is a honeypot checkbox. If spam becomes a problem, add a rate-limit rule in
-      Vercel → Firewall for <code>/api/*</code>, or add a CAPTCHA (e.g. Cloudflare Turnstile) and verify it in the handler.</li>
+  <li>Spam protection: a honeypot checkbox, plus (PHP API) 5 submissions per visitor per 10 minutes. On Vercel, add a rate-limit rule in
+      Vercel → Firewall for <code>/api/*</code>.</li>
   <li>Request bodies over 20 KB are rejected.</li>
 </ul>
 
