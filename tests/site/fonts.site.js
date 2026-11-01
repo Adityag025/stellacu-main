@@ -69,3 +69,36 @@ test('fonts: every heading uses weight 500', async () => {
   }
   assert.deepEqual(problems, []);
 });
+
+test('fonts: paragraphs use 400 (title-like ones 500) and buttons use 500', async () => {
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const path of PAGES) {
+      const { page } = await openPage(browser, path);
+      const found = await page.evaluate(() => {
+        const out = [];
+        const visible = (el) => el.getClientRects().length && el.textContent.trim();
+        const titleLike = '.mxd-block__manifest p, .mxd-services-list__title p, .custom-premium-stat-card__number';
+        for (const p of document.querySelectorAll('main p')) {
+          if (!visible(p)) continue;
+          const want = p.matches(titleLike) ? '500' : '400';
+          const got = getComputedStyle(p).fontWeight;
+          if (got !== want) out.push(`p ${got} (want ${want}) "${p.textContent.trim().slice(0, 30)}"`);
+        }
+        for (const btn of document.querySelectorAll('.btn')) {
+          if (!btn.getClientRects().length) continue;
+          const label = btn.querySelector('.btn-caption') || btn;
+          const got = getComputedStyle(label).fontWeight;
+          if (got !== '500') out.push(`button ${got} "${btn.textContent.trim().replace(/s+/g, ' ').slice(0, 30)}"`);
+        }
+        return out;
+      });
+      found.forEach((f) => problems.push(`${path}: ${f}`));
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});
