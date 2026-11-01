@@ -18,6 +18,9 @@ ErrorDocument 404 /404.html
   # /api/subscribe and /api/health run php-api/<name>.php.
   RewriteRule ^api/(contact|subscribe|health)/?$ php-api/$1.php [L]
 
+  # Private, password-protected leads page.
+  RewriteRule ^leads/?$ php-api/leads.php [L]
+
   # The php-api folder (code and config.local.php with the mailbox password)
   # is never reachable directly, only through the /api/... addresses above.
   RewriteCond %{THE_REQUEST} \s/+php-api(/|\s|\?) [NC]

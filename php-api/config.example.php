@@ -11,6 +11,16 @@ return [
     // Where enquiries are delivered.
     'mail_to' => ['sales@stellacumedia.com'],
 
+    // MySQL database that stores every lead (hPanel → Databases → MySQL Databases).
+    'db_host' => 'localhost',
+    'db_name' => '',
+    'db_user' => '',
+    'db_pass' => '',
+
+    // Password for the private /leads page, stored as a hash. Create one with:
+    //   php -r "echo password_hash('your-password', PASSWORD_DEFAULT);"
+    'leads_password_hash' => '',
+
     // Optional: Mailchimp list for the footer newsletter.
     // 'mailchimp_api_key' => '',
     // 'mailchimp_audience_id' => '',

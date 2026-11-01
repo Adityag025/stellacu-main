@@ -350,8 +350,10 @@ with the same JSON responses and validation messages, and sends email through th
   <tr><td><code>php-api/contact.php</code>, <code>subscribe.php</code>, <code>health.php</code></td><td>The three endpoints (mirror <code>api/*.js</code>)</td></tr>
   <tr><td><code>php-api/_validation.php</code>, <code>_forms.php</code></td><td>Same rules/messages and form definitions as <code>api/_lib/validation.js</code> / <code>forms.js</code>; keep them in sync</td></tr>
   <tr><td><code>php-api/_email.php</code></td><td>Notification email + SMTP over SSL to <code>smtp.hostinger.com:465</code>; optional Mailchimp</td></tr>
+  <tr><td><code>php-api/_db.php</code></td><td>Saves every enquiry (table <code>leads</code>) and newsletter signup (<code>subscribers</code>) in the Hostinger MySQL database <em>before</em> emailing, and records whether the email went out. Also keeps an <strong>activity log</strong> (<code>activity_log</code>, kept 90 days): every request outcome, saved leads, email failures, bots, rate limits, server errors and leads-page sign-ins/CSV downloads. No names, emails or messages are logged; visitors appear as a short one-way code of their IP. Tables are created automatically.</td></tr>
+  <tr><td><code>php-api/leads.php</code> → <code>/leads</code></td><td>Private leads page: password login (5 attempts per 15 min), Enquiries / Newsletter / Activity log tabs, search, paging, CSV download. Not indexed, cannot be framed. Leads can also be viewed in hPanel → Databases → phpMyAdmin.</td></tr>
   <tr><td><code>php-api/_ratelimit.php</code></td><td>Spam protection: 5 submissions per visitor per 10 minutes (429 <code>too_many_requests</code>)</td></tr>
-  <tr><td><code>php-api/config.local.php</code></td><td>Mailbox password and settings. <strong>Only on the server</strong>: git-ignored, not in the upload bundle. Create it from <code>config.example.php</code></td></tr>
+  <tr><td><code>php-api/config.local.php</code></td><td>Mailbox password, database login, leads-page password hash. <strong>Only on the server</strong>: git-ignored, not in the upload bundle. Create it from <code>config.example.php</code></td></tr>
 </table>
 </div>
 

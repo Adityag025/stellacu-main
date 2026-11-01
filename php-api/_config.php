@@ -29,6 +29,13 @@ function api_config(): array
         'mailchimp_api_key' => '',
         'mailchimp_audience_id' => '',
         'mailchimp_double_opt_in' => true,
+        // MySQL database for saving leads (hPanel → Databases → MySQL Databases).
+        'db_host' => 'localhost',
+        'db_name' => '',
+        'db_user' => '',
+        'db_pass' => '',
+        // Private /leads page: password_hash() of its password (see config.example.php).
+        'leads_password_hash' => '',
         // Spam protection: max form submissions per visitor (IP) per window.
         'rate_limit_max' => 5,
         'rate_limit_window_seconds' => 600,

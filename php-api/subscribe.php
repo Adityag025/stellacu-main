@@ -16,6 +16,7 @@ run_endpoint(['POST'], static function (): void {
     $body = read_json_body();
 
     if (is_bot($body)) {
+        log_event('warning', 'bot_blocked', 'newsletter');
         send_json(200, ['ok' => true]);
         return;
     }
@@ -25,23 +26,34 @@ run_endpoint(['POST'], static function (): void {
         throw new HttpError(422, 'validation_failed', $errors);
     }
 
-    if (!mailchimp_configured($config) && !mail_configured($config)) {
-        error_log('[subscribe] not configured: create php-api/config.local.php');
+    if (!mailchimp_configured($config) && !mail_configured($config) && !db_configured($config)) {
         throw new HttpError(503, 'not_configured');
     }
 
     enforce_rate_limit($config);
 
+    // Save first, so the signup is kept even if Mailchimp/email fails.
+    $page = read_page_path($body);
+    $subscriberId = db_save_subscriber($values['email'], $page);
+
+    $delivered = false;
     try {
         if (mailchimp_configured($config)) {
             mailchimp_add_subscriber($config, $values['email']);
-        } else {
-            send_team_email($config, $values['email'], build_subscriber_email($values['email'], read_page_path($body)));
+            $delivered = true;
+        } elseif (mail_configured($config)) {
+            send_team_email($config, $values['email'], build_subscriber_email($values['email'], $page));
+            $delivered = true;
         }
     } catch (MailError $e) {
-        error_log('[subscribe] delivery failed: ' . $e->getMessage());
+        log_event('error', 'newsletter_delivery_failed', 'subscriber #' . ($subscriberId ?? '-') . ': ' . $e->getMessage());
+    }
+    db_set_status('subscribers', $subscriberId, $delivered);
+
+    log_event('info', 'newsletter_signup', sprintf('subscriber #%s, delivered: %s', $subscriberId ?? 'not saved', $delivered ? 'yes' : 'no'));
+
+    if (!$delivered && $subscriberId === null) {
         throw new HttpError(502, 'delivery_failed');
     }
-
     send_json(200, ['ok' => true]);
 });

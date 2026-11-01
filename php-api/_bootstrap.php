@@ -17,6 +17,7 @@ require __DIR__ . '/_validation.php';
 require __DIR__ . '/_forms.php';
 require __DIR__ . '/_email.php';
 require __DIR__ . '/_ratelimit.php';
+require __DIR__ . '/_db.php';
 
 const MAX_BODY_BYTES = 20 * 1024;
 
@@ -82,19 +83,24 @@ function run_endpoint(array $methods, callable $handle): void
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     if (!in_array($method, $methods, true)) {
         header('Allow: ' . implode(', ', $methods));
+        log_event('warning', 'method_not_allowed', $method);
         send_json(405, ['ok' => false, 'error' => 'method_not_allowed']);
         return;
     }
     try {
         $handle();
     } catch (HttpError $e) {
+        // Wrong fields are everyday visitor mistakes (info); refusals are
+        // warnings; anything the server could not do is an error.
+        $level = $e->status >= 500 ? 'error' : ($e->errorCode === 'validation_failed' ? 'info' : 'warning');
+        log_event($level, $e->errorCode, $e->fields ? 'fields: ' . implode(', ', array_keys($e->fields)) : '');
         $payload = ['ok' => false, 'error' => $e->errorCode];
         if ($e->fields) {
             $payload['fields'] = $e->fields;
         }
         send_json($e->status, $payload);
     } catch (Throwable $e) {
-        error_log('[api] unexpected error: ' . $e->getMessage());
+        log_event('error', 'internal_error', get_class($e) . ': ' . $e->getMessage());
         send_json(500, ['ok' => false, 'error' => 'internal_error']);
     }
 }
