@@ -103,3 +103,43 @@ for (const width of [DESKTOP, MOBILE]) {
     assert.deepEqual(problems, []);
   });
 }
+
+test('service pages: Architecture Notes title, description and button are evenly spaced', async () => {
+  const { SERVICE_PAGES } = require('./browser');
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const width of [1280, DESKTOP, 1920]) {
+      for (const path of SERVICE_PAGES) {
+        const { page } = await openPage(browser, path, width);
+        const row = await page.evaluate(() => {
+          const section = document.querySelector('.architecture-notes-section');
+          const title = section.querySelector('h2');
+          const descr = section.querySelector('.mxd-section-title__hrdescr p');
+          const button = section.querySelector('.mxd-section-title__hrcontrols a');
+          // Visible text extents (ignores the boxes' empty space).
+          const textBox = (el) => {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const rects = [...range.getClientRects()];
+            return { left: Math.min(...rects.map((r) => r.left)), right: Math.max(...rects.map((r) => r.right)) };
+          };
+          const t = textBox(title);
+          const d = textBox(descr);
+          const lineHeight = parseFloat(getComputedStyle(title).lineHeight);
+          return {
+            before: Math.round(d.left - t.right),
+            after: Math.round(button.getBoundingClientRect().left - d.right),
+            titleLines: Math.round(title.getBoundingClientRect().height / lineHeight),
+          };
+        });
+        if (Math.abs(row.before - row.after) > 3) problems.push(`${path} @${width}: gaps ${row.before}px vs ${row.after}px`);
+        if (row.titleLines !== 1) problems.push(`${path} @${width}: title wraps to ${row.titleLines} lines`);
+        await page.close();
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});
