@@ -143,3 +143,41 @@ test('service pages: Architecture Notes title, description and button are evenly
   }
   assert.deepEqual(problems, []);
 });
+
+test('insights: every heading row is evenly spaced', async () => {
+  const browser = await launch();
+  const problems = [];
+  try {
+    for (const width of [1280, DESKTOP, 1920]) {
+      const { page } = await openPage(browser, '/insights', width);
+      const rows = await page.evaluate(() =>
+        [...document.querySelectorAll('.insights-hero, .insights-category')].map((section) => {
+          const textBox = (el) => {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const rects = [...range.getClientRects()];
+            return { left: Math.min(...rects.map((r) => r.left)), right: Math.max(...rects.map((r) => r.right)) };
+          };
+          const title = section.querySelector('.mxd-section-title__hrtitle :is(h1, h2)');
+          const t = textBox(title);
+          const d = textBox(section.querySelector('.mxd-section-title__hrdescr p'));
+          const button = section.querySelector('.mxd-section-title__hrcontrols a').getBoundingClientRect();
+          return {
+            name: title.textContent.trim(),
+            before: Math.round(d.left - t.right),
+            after: Math.round(button.left - d.right),
+            titleLines: Math.round(title.getBoundingClientRect().height / parseFloat(getComputedStyle(title).lineHeight)),
+          };
+        })
+      );
+      for (const row of rows) {
+        if (Math.abs(row.before - row.after) > 3) problems.push(`${row.name} @${width}: gaps ${row.before}px vs ${row.after}px`);
+        if (row.titleLines !== 1) problems.push(`${row.name} @${width}: title wraps to ${row.titleLines} lines`);
+      }
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(problems, []);
+});
