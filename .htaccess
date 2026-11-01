@@ -14,6 +14,13 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Never serve developer files, backups or hidden files, in case they were
+  # uploaded by mistake (".well-known" stays reachable for SSL checks).
+  RewriteRule ^(api|docs|tests|scripts|source-files|node_modules|dist)(/|$) - [F,L]
+  RewriteRule (^|/)\.(?!well-known/) - [F,L]
+  RewriteRule \.(zip|tar|gz|sql|env|example|log|md)$ - [F,L,NC]
+  RewriteRule ^(package(-lock)?\.json|vercel\.json)$ - [F,L]
+
   # Always use HTTPS.
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
