@@ -1533,17 +1533,15 @@ body {
   padding-bottom: 90px !important;
 }
 
-.architecture-notes-section h2 {
-  font-size: 5rem !important;
+/* "Architecture Notes" headings - Insights header, Insights category titles
+   and the service pages - share one size: 28px on phones, growing with the
+   screen (36px at 1440px), up to 48px. */
+.architecture-notes-section h2,
+.insights-hero h1 {
+  font-size: clamp(2.8rem, 2.5vw, 4.8rem) !important;
   line-height: 1.1 !important;
   word-break: keep-all !important;
   overflow-wrap: normal !important;
-}
-
-@media only screen and (max-width: 768px) {
-  .architecture-notes-section h2 {
-    font-size: 3.6rem !important;
-  }
 }
 
 @media only screen and (min-width: 1200px) {
@@ -2731,18 +2729,6 @@ section,
   color: #ffffff;
 }
 
-/* Insights: headings were wider than phone screens, so "ARCHITECTURE"
-   broke mid-word. Scale them with the viewport on phones. */
-@media only screen and (max-width: 575px) {
-  .insights-hero h1 {
-    font-size: min(3.6rem, 8.5vw) !important;
-  }
-
-  .architecture-notes-section h2 {
-    font-size: min(3rem, 7.5vw) !important;
-  }
-}
-
 /* Inner-page stat cards had no space below them, so the next section's
    heading sat right on the last card (Solutions + service pages) */
 .mxd-section.mxd-section-inner-stats {
@@ -2761,12 +2747,6 @@ section,
   padding-right: 0;
 }
 
-/* Insights: category titles sit in the first card column; scale so they stay on two lines */
-@media only screen and (min-width: 1200px) {
-  .insights-category h2 {
-    font-size: min(5rem, 2.5vw) !important;
-  }
-}
 
 /* Form field validation (js/app.js "Website Forms"): red border + message under the field */
 :root {
