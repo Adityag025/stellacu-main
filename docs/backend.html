@@ -163,6 +163,7 @@ tests/                       Automated tests (node --test), no network needed
 scripts/dev-server.js        Local server: static site + /api, reads .env.local
 docs/backend.html            This document
 .env.example                 Template for local settings (copy to .env.local)
+vercel.json                  Clean URLs: /about-us serves about-us.html; .html addresses 308-redirect
 .vercelignore                Keeps tests/, scripts/, docs/ off the live site
 package.json                 npm scripts + Node version (22.x). No dependencies.</code></pre>
 
@@ -259,6 +260,9 @@ npm run serve                  # http://localhost:3000</code></pre>
 forms answer <code>not_configured</code>, which is fine for layout work. Use a different port with
 <code>PORT=4000 npm run serve</code>.</p>
 <p>Alternatively, with the Vercel CLI: <code>vercel dev</code> (uses the environment variables from your Vercel project).</p>
+<p>Pages use clean URLs (<code>/about-us</code>, not <code>/about-us.html</code>). In links, write
+<code>href="about-us"</code> (or <code>../about-us</code> from <code>insights/</code>) and <code>href="/"</code> for home.
+VS Code Live Server does not support clean URLs; use <code>npm run serve</code>.</p>
 <p>Opening the HTML files directly from disk (<code>file://</code>) does not work: the header/footer
 includes and the API both need a web server.</p>
 

@@ -1,9 +1,10 @@
 /**
  * Local development server: `npm run serve`, then open http://localhost:3000
  *
- * Serves the static site and runs the functions in /api the same way
- * Vercel does (/api/contact → api/contact.js), so forms can be tested
- * without deploying. Reads settings from .env.local if it exists.
+ * Serves the static site with clean URLs and runs the functions in /api
+ * the same way Vercel does (/about-us → about-us.html, /api/contact →
+ * api/contact.js), so pages and forms can be tested without deploying.
+ * Reads settings from .env.local if it exists.
  *
  * This is a convenience for development only; production runs on Vercel.
  */
@@ -45,11 +46,21 @@ function findApiHandler(pathname) {
   return fs.existsSync(file) ? require(file) : null;
 }
 
+function isFile(file) {
+  return fs.existsSync(file) && fs.statSync(file).isFile();
+}
+
+/**
+ * Clean URLs, as configured in vercel.json: "/about-us" serves about-us.html,
+ * "/" serves index.html. Returns null when nothing matches.
+ */
 function resolveStaticFile(pathname) {
   const file = path.normalize(path.join(ROOT, decodeURIComponent(pathname)));
-  if (!file.startsWith(ROOT + path.sep)) return null; // block ../ escapes
-  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) return path.join(file, 'index.html');
-  return file;
+  if (file !== ROOT && !file.startsWith(ROOT + path.sep)) return null; // block ../ escapes
+  if (isFile(file)) return file;
+  if (isFile(`${file}.html`)) return `${file}.html`;
+  if (isFile(path.join(file, 'index.html'))) return path.join(file, 'index.html');
+  return null;
 }
 
 function sendFile(res, status, file) {
@@ -65,8 +76,15 @@ const server = http.createServer(async (req, res) => {
     if (handler) return handler(req, res);
   }
 
+  // Like Vercel's cleanUrls: "/about-us.html" → 308 → "/about-us", "/index.html" → "/".
+  if (pathname.endsWith('.html')) {
+    const clean = pathname.replace(/(?:index)?\.html$/, '') || '/';
+    res.writeHead(308, { Location: clean });
+    return res.end();
+  }
+
   const file = resolveStaticFile(pathname);
-  if (file && fs.existsSync(file)) return sendFile(res, 200, file);
+  if (file) return sendFile(res, 200, file);
   sendFile(res, 404, path.join(ROOT, '404.html'));
 });
 

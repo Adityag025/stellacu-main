@@ -12,7 +12,7 @@
  * and window load). Loading the partials first keeps that timing exactly
  * as it was when the markup lived in each page.
  *
- * Needs the site to be served over http(s) (Live Server, hosting);
+ * Needs a server with clean URLs: Vercel, `npm run serve` or `vercel dev`;
  * browsers block these requests for pages opened directly from disk.
  */
 (function () {
@@ -22,7 +22,9 @@
 
   for (var i = 0; i < slots.length; i++) {
     var slot = slots[i];
-    var url = root + 'partials/' + slot.getAttribute('data-include') + '.html';
+    // No ".html": the site uses clean URLs (vercel.json), which would
+    // otherwise redirect every partial request before serving it.
+    var url = root + 'partials/' + slot.getAttribute('data-include');
     try {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, false);
