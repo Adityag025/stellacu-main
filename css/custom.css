@@ -2879,3 +2879,38 @@ main :is(.mxd-block__manifest p, .mxd-services-list__title p, .custom-premium-st
 .btn .btn-caption * {
   font-weight: 500 !important;
 }
+
+/* Home page service cards in the dark theme: dark card, light text, softer
+   accent border and tags (light theme unchanged above). */
+[color-scheme=dark] .services-stack .mxd-projects-stack__inner {
+  background: #1e1e1e !important;
+  background-color: #1e1e1e !important;
+  border-color: rgba(106, 167, 232, 0.35) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+[color-scheme=dark] .services-stack .mxd-services-card__title,
+[color-scheme=dark] .services-stack .mxd-services-card__title.opposite,
+[color-scheme=dark] .services-stack .mxd-services-card__title * {
+  color: #f1f1f1 !important;
+}
+
+[color-scheme=dark] .services-stack .mxd-services-card__desc,
+[color-scheme=dark] .services-stack .mxd-services-card__desc.opposite {
+  color: #b3b3b3 !important;
+}
+
+[color-scheme=dark] .services-stack .mxd-services-card__num {
+  color: #6aa7e8 !important;
+}
+
+[color-scheme=dark] .services-stack .mxd-services-card__tags .tag {
+  background-color: rgba(106, 167, 232, 0.08) !important;
+  border-color: rgba(106, 167, 232, 0.3) !important;
+  color: #9cc6f0 !important;
+}
+
+[color-scheme=dark] .services-stack .mxd-services-card__tags .tag:hover {
+  background-color: rgba(106, 167, 232, 0.16) !important;
+  border-color: #6aa7e8 !important;
+}
