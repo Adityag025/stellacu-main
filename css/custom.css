@@ -2901,7 +2901,7 @@ main :is(.mxd-block__manifest p, .mxd-services-list__title p, .custom-premium-st
 }
 
 [color-scheme=dark] .services-stack .mxd-services-card__num {
-  color: #6aa7e8 !important;
+  color: #004990 !important;
 }
 
 [color-scheme=dark] .services-stack .mxd-services-card__tags .tag {
@@ -2913,4 +2913,14 @@ main :is(.mxd-block__manifest p, .mxd-services-list__title p, .custom-premium-st
 [color-scheme=dark] .services-stack .mxd-services-card__tags .tag:hover {
   background-color: rgba(106, 167, 232, 0.16) !important;
   border-color: #6aa7e8 !important;
+}
+
+/* Home hero on tablets / small laptops (768-1199px): the video kept half the
+   screen width next to the text and pushed the page sideways. Let it shrink
+   into the space that is left. */
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+  .mxd-hero-08__video-wrap {
+    flex-shrink: 1;
+    min-width: 0;
+  }
 }
